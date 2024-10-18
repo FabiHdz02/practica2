@@ -7,7 +7,7 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body>
-    @if(Auth::check()) <!-- Verifica si el usuario está autenticado -->
+    @if(Auth::check())
         @include("menu2")
         @yield("contenido2")
     @else

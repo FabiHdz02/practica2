@@ -54,13 +54,13 @@
             <div class="collapse navbar-collapse" id="navbarScroll">
                 <ul class="navbar-nav me-auto my-2 my-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Acerca de</a>
+                        <a class="nav-link active" aria-current="page" href="{{ url('/acerca') }}">Acerca de</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Contáctanos</a>
+                        <a class="nav-link" href="{{ url('/contactanos') }}">Contáctanos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Ayuda</a>
+                        <a class="nav-link" href="{{ url('/ayuda') }}">Ayuda</a>
                     </li>
                     @guest
                     <li class="nav-item">

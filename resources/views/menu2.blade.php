@@ -3,10 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu S</title>
+    <title>Menu Secundario</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <style>
+        /* Menú desplegable con :hover */
+.nav-item:hover .dropdown-menu {
+    display: block; /* Mostrar el menú cuando el cursor está sobre el elemento del menú */
+    margin-top: 0; /* Para asegurar que el menú aparezca justo debajo del botón */
+}
+
+.dropdown-menu {
+    display: none; /* Por defecto ocultamos los dropdown */
+    margin-top: 0; /* Alineamos el dropdown */
+    transition: all 0.3s ease-in-out; /* Animación de transición suave */
+}
+
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f9f9f9; /* Fondo gris claro */
@@ -65,14 +78,14 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#">Periodos</a></li>
-                            <li><a class="dropdown-item" href="#">Plazas</a></li>
-                            <li><a class="dropdown-item" href="#">Puestos</a></li>
-                            <li><a class="dropdown-item" href="#">Personal</a></li>
-                            <li><a class="dropdown-item" href="#">Deptos.</a></li>
-                            <li><a class="dropdown-item" href="#">Carreras</a></li>
-                            <li><a class="dropdown-item" href="#">Retículas</a></li>
-                            <li><a class="dropdown-item" href="#">Materias</a></li>
-                            <li><a class="dropdown-item" href="#">Alumnos</a></li>
+                            <li><a class="dropdown-item" href="{{ route('plazas.index') }}">Plazas</a></li>
+                            <li><a class="dropdown-item" href="{{ route('puestos.index') }}">Puestos</a></li>
+                            <li><a class="dropdown-item" href="">Personal</a></li>
+                            <li><a class="dropdown-item" href="{{ route('deptos.index') }}">Deptos.</a></li>
+                            <li><a class="dropdown-item" href="{{ route('carreras.index') }}">Carreras</a></li>
+                            <li><a class="dropdown-item" href="">Retículas</a></li>
+                            <li><a class="dropdown-item" href="">Materias</a></li>
+                            <li><a class="dropdown-item" href="{{ route('alumnos.index') }}">Alumnos</a></li>
                         </ul>
                     </li>
 
@@ -82,8 +95,8 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li class="d-flex justify-content-around">
-                                <a class="dropdown-item" href="#">Docentes</a>
-                                <a class="dropdown-item" href="#">Alumnos</a>
+                                <a class="dropdown-item" href="">Docentes</a>
+                                <a class="dropdown-item" href="{{ route('alumnos.index') }}">Alumnos</a>
                             </li>
                         </ul>
                     </li>
@@ -135,14 +148,13 @@
         <h1 class="display-4">Descripción del Sistema</h1>
         <p class="lead">Esta aplicación te permitirá acceder a catálogos, horarios y más.</p>
     </div>
-
+    <div>
+        @yield("contenido2")
+    </div>
     <footer class="footer mt-auto py-3">
         <div class="container">
             <span class="text-muted">Email: {{ Auth::user()->email }} | Usuario: {{ Auth::user()->name }}</span>
         </div>
     </footer>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -31,7 +31,7 @@ class AlumnoController extends Controller
     public function create()
     {
         $alumno = new Alumno;
-        $carreras = Carrera::all();  // Obtener todas las carreras
+        $carreras = Carrera::all();
         $accion = "C";
         $txtbtn = "Guardar";
         $des = "";

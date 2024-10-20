@@ -6,61 +6,57 @@
     <title>Menu Secundario</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <style>
-        /* Menú desplegable con :hover */
-.nav-item:hover .dropdown-menu {
-    display: block; /* Mostrar el menú cuando el cursor está sobre el elemento del menú */
-    margin-top: 0; /* Para asegurar que el menú aparezca justo debajo del botón */
-}
-
-.dropdown-menu {
-    display: none; /* Por defecto ocultamos los dropdown */
-    margin-top: 0; /* Alineamos el dropdown */
-    transition: all 0.3s ease-in-out; /* Animación de transición suave */
-}
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f9f9f9; /* Fondo gris claro */
-        }
-        .navbar {
-            background-color: #5c6bc0; /* Azul formal */
-        }
-        .navbar-brand, .nav-link {
-            color: #ffffff !important; /* Texto blanco en la barra de navegación */
-        }
-        .navbar-brand:hover, .nav-link:hover {
-            color: #ffd740 !important; /* Color amarillo al pasar el mouse */
-        }
-        .jumbotron {
-            background-color: #c5cae9; /* Azul pastel */
-            border-radius: 10px;
-            padding: 40px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            margin-top: 20px; /* Espaciado superior */
-        }
-        .display-4 {
-            color: #1a237e; /* Color azul oscuro para el título */
-        }
-        .lead {
-            color: #424242; /* Color gris oscuro para el texto secundario */
-        }
-        .icon {
-            width: 24px; /* Tamaño del icono */
-            height: 24px; /* Tamaño del icono */
-            margin-right: 8px; /* Espaciado a la derecha del icono */
-            vertical-align: middle; /* Alinear verticalmente el icono con el texto */
-        }
-        .btn-logout {
-            color: #ffffff; /* Texto blanco */
-            transition: background-color 0.3s, color 0.3s; /* Transiciones suaves */
-        }
-        .btn-logout:hover {
-            background-color: #ffd740; /* Fondo amarillo al pasar el mouse */
-            color: #5c6bc0; /* Texto azul formal */
-        }
-    </style>
+<style>
+    .nav-item:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+    }
+    .dropdown-menu {
+    display: none;
+    margin-top: 0;
+    transition: all 0.3s ease-in-out;
+    }
+    body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    }
+    .navbar {
+    background-color: #5c6bc0; 
+    }
+    .navbar-brand, .nav-link {
+    color: #ffffff !important;
+    }
+    .navbar-brand:hover, .nav-link:hover {
+    color: #ffd740 !important;
+    }
+    .jumbotron {
+    background-color: #c5cae9;
+    border-radius: 10px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    }
+    .display-4 {
+    color: #1a237e;
+    }
+    .lead {
+    color: #424242;
+    }
+    .icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+    vertical-align: middle;
+    }
+    .btn-logout {
+    color: #ffffff; 
+    transition: background-color 0.3s, color 0.3s; 
+    }
+    .btn-logout:hover {
+    background-color: #ffd740; 
+    color: #5c6bc0;
+    }
+</style>
 </head>
 <body>
 
@@ -77,14 +73,14 @@
                             Catálogos
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Periodos</a></li>
+                            <li><a class="dropdown-item" href="{{ route('periodos.index') }}">Periodos</a></li>
                             <li><a class="dropdown-item" href="{{ route('plazas.index') }}">Plazas</a></li>
                             <li><a class="dropdown-item" href="{{ route('puestos.index') }}">Puestos</a></li>
                             <li><a class="dropdown-item" href="">Personal</a></li>
-                            <li><a class="dropdown-item" href="{{ route('deptos.index') }}">Deptos.</a></li>
+                            <li><a class="dropdown-item" href="{{ route('deptos.index') }}">Deptos</a></li>
                             <li><a class="dropdown-item" href="{{ route('carreras.index') }}">Carreras</a></li>
-                            <li><a class="dropdown-item" href="">Retículas</a></li>
-                            <li><a class="dropdown-item" href="">Materias</a></li>
+                            <li><a class="dropdown-item" href="{{ route('reticulas.index') }}">Retículas</a></li>
+                            <li><a class="dropdown-item" href="{{ route('materias.index') }}">Materias</a></li>
                             <li><a class="dropdown-item" href="{{ route('alumnos.index') }}">Alumnos</a></li>
                         </ul>
                     </li>

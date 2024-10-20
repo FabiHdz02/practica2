@@ -47,16 +47,16 @@ class AlumnoController extends Controller
 
     public function show(Alumno $alumno)
     {
-        $carreras = Carrera::all();  // Obtener todas las carreras
+        $carreras = Carrera::all();
+        $txtbtn = "";
         $accion = "D";
-        $txtbtn = "Confirmar Eliminación";
         $des = "disabled";
         return view("alumnos.frm", compact("alumno", "carreras", "accion", "txtbtn", "des"));
     }
 
     public function edit(Alumno $alumno)
     {
-        $carreras = Carrera::all();  // Obtener todas las carreras
+        $carreras = Carrera::all();
         $accion = "E";
         $txtbtn = "Actualizar";
         $des = "";
@@ -66,7 +66,7 @@ class AlumnoController extends Controller
 
     public function update(Request $request, Alumno $alumno)
     {        
-        $alumno->update($request->all()); // Actualiza el alumno con todos los datos del formulario
+        $alumno->update($request->all());
         return redirect()->route("alumnos.index")->with("mensaje", "Alumno actualizado correctamente.");
     }
     

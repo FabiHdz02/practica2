@@ -10,7 +10,7 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-bordered table-striped table-hover w-100"> <!-- Usar w-100 para que ocupe todo el ancho disponible -->
+        <table class="table table-bordered table-striped table-hover w-100">
             <thead class="table-light">
                 <tr>
                     <th scope="col">ID Plaza</th>

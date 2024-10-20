@@ -39,7 +39,7 @@
                     @endforeach
                 </tbody>
             </table>
-            {{ $puestos->links() }} <!-- Paginación si es necesario -->
+            {{ $puestos->links() }}
         </div>
     </div>
 @endsection

@@ -11,7 +11,9 @@ class Depto extends Model
     /** @use HasFactory<\Database\Factories\DeptoFactory> */
     use HasFactory;
 
-    public function carreras(): HasMany{
+    protected $fillable = ['iddepto', 'nombredepto', 'nombremediano', 'nombrecorto'];
+
+    public function carrera(): HasMany{
         return $this->hasMany(Carrera::class);
     }
 }

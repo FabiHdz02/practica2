@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Plaza; // Asegúrate de tener el modelo Plaza
+use App\Models\Plaza;
 use Illuminate\Http\Request;
 
 class PlazaController extends Controller
@@ -19,7 +19,7 @@ class PlazaController extends Controller
 
     public function index()
     {
-        $plazas = Plaza::paginate(8); // Paginar las plazas
+        $plazas = Plaza::paginate(8);
         return view("plazas.index", compact("plazas"));
     }
 
@@ -34,15 +34,15 @@ class PlazaController extends Controller
 
     public function store(Request $request)
     {
-        $val = $request->validate($this->val); // Validar los datos
-        Plaza::create($val); // Crear una nueva plaza
+        $val = $request->validate($this->val);
+        Plaza::create($val); 
         return redirect()->route("plazas.index")->with("mensaje", "Plaza registrada correctamente.");
     }
 
     public function show(Plaza $plaza)
     {
         $accion = "D";
-        $txtbtn = "Confirmar Eliminación";
+        $txtbtn = "";
         $des = "disabled";
         return view("plazas.frm", compact("plaza", "accion", "txtbtn", "des"));
     }
@@ -57,14 +57,13 @@ class PlazaController extends Controller
 
     public function update(Request $request, Plaza $plaza)
     {
-        // Actualiza la plaza con todos los datos del formulario
         $plaza->update($request->all());
         return redirect()->route("plazas.index")->with("mensaje", "Plaza actualizada correctamente.");
     }
 
     public function destroy(Plaza $plaza)
     {
-        $plaza->delete(); // Elimina la plaza
+        $plaza->delete();
         return redirect()->route("plazas.index")->with("mensaje", "Plaza eliminada correctamente.");
     }
 }

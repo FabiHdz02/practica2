@@ -2,71 +2,69 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Depto; // Asegúrate de que esto sea 'Depto'
+use App\Models\Depto;
 use Illuminate\Http\Request;
 
 class DeptoController extends Controller
 {
     public function index()
     {
-        $departamentos = Depto::paginate(8);
-        return view("deptos.index", compact("departamentos"));
+        $deptos = Depto::paginate(8);
+        return view("deptos.index", compact("deptos"));
     }
 
     public function create()
     {
-        $departamento = new Depto;
+        $depto = new Depto;
         $accion = "C";
         $txtbtn = "Guardar";
         $des = "";
-        return view("deptos.frm", compact("departamento", "accion", "txtbtn", "des"));
+        return view("deptos.frm", compact("depto", "accion", "txtbtn", "des"));
     }
 
     public function store(Request $request)
     {
-        $val = $request->validate([
-            'iddepto' => ['required', 'max:2', 'unique:depto,iddepto'],
-            'nombredepto' => ['required', 'max:100', 'unique:depto,nombredepto'],
-            'nombremediano' => ['required', 'max:15', 'unique:depto,nombremediano'],
-            'nombrecorto' => ['required', 'max:5', 'unique:depto,nombrecorto'],
-        ]); 
-
-        Depto::create($val); 
-        return redirect()->route("deptos.index")->with("mensaje", "Departamento registrado correctamente.");
+        $request->validate([
+            'nombredepto' => 'required|string|max:255',
+            'nombremediano' => 'required|string|max:255',
+            'nombrecorto' => 'required|string|max:50',
+        ]);
+    
+        Depto::create($request->all());
+        return redirect()->route("deptos.index")->with("mensaje", "Depto registrado correctamente.");
     }
-
-    public function show(Depto $departamento) 
+    
+    public function show(Depto $depto)
     {
         $accion = "D";
-        $txtbtn = "Confirmar Eliminación";
+        $txtbtn = "";
         $des = "disabled";
-        return view("deptos.frm", compact("departamento", "accion", "txtbtn", "des"));
+        return view("deptos.frm", compact("depto", "accion", "txtbtn", "des"));
     }
 
-    public function edit(Depto $departamento) 
+    public function edit(Depto $depto)
     {
-        $accion = "E"; 
+        $accion = "E";
         $txtbtn = "Actualizar";
-        $des = ""; 
-        return view("deptos.frm", compact("departamento", "accion", "txtbtn", "des"));
+        $des = "";
+        return view("deptos.frm", compact("depto", "accion", "txtbtn", "des"));
     }
 
-    public function update(Request $request, Depto $departamento) 
+    public function update(Request $request, Depto $depto)
     {
-        $val = $request->validate([
-            'iddepto' => ['required', 'max:2', 'unique:depto,iddepto,' . $departamento->id],
-            'nombredepto' => ['required', 'max:100', 'unique:depto,nombredepto,' . $departamento->id],
-            'nombremediano' => ['required', 'max:15', 'unique:depto,nombremediano,' . $departamento->id],
-            'nombrecorto' => ['required', 'max:5', 'unique:depto,nombrecorto,' . $departamento->id],
-        ]); 
-
-        $departamento->update($val); 
-        return redirect()->route("deptos.index")->with("mensaje", "Departamento actualizado correctamente.");
+        $request->validate([
+            'nombredepto' => 'required|string|max:255',
+            'nombremediano' => 'required|string|max:255',
+            'nombrecorto' => 'required|string|max:50',
+        ]);
+    
+        $depto->update($request->all());
+        return redirect()->route("deptos.index")->with("mensaje", "Depto actualizado correctamente.");
     }
 
-    public function destroy(Depto $departamento) 
+    public function destroy(Depto $depto)
     {
-        $departamento->delete(); 
-        return redirect()->route("deptos.index")->with("mensaje", "Departamento eliminado correctamente.");
+        $depto->delete();
+        return redirect()->route("deptos.index")->with("mensaje", "Depto eliminado correctamente.");
     }
 }

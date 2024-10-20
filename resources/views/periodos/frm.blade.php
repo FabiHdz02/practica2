@@ -14,56 +14,56 @@
             </ul>
 
             @if ($accion == 'C')
-                <h2 class="text-center">Registrando Departamento</h2>
-                <form action="{{ route('deptos.store') }}" method="POST">
+                <h2 class="text-center">Registrando Periodo</h2>
+                <form action="{{ route('periodos.store') }}" method="POST">
             @elseif ($accion == 'E')
-                <h2 class="text-center">Editando Departamento</h2>
-                <form action="{{ route('deptos.update', $depto->id) }}" method="POST">
+                <h2 class="text-center">Editando Periodo</h2>
+                <form action="{{ route('periodos.update', $periodo->id) }}" method="POST">
                 @csrf
                 @method('PUT')
             @elseif ($accion == 'D')
-                <h2 class="text-center">Eliminar Departamento</h2>
-                <form action="{{ route('deptos.destroy', $depto->id) }}" method="POST">
+                <h2 class="text-center">Eliminar Periodo</h2>
+                <form action="{{ route('periodos.destroy', $periodo->id) }}" method="POST">
                 @method('DELETE')
             @endif
 
             @csrf
 
             <div class="row mb-3">
-                <label for="iddepto" class="col-sm-4 col-form-label">ID Departamento:</label>
+                <label for="periodo" class="col-sm-4 col-form-label">Periodo:</label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" id="iddepto" name="iddepto" value="{{ old('iddepto', $depto->iddepto) }}" {{$des}}>
-                    @error("iddepto")
+                    <input type="text" class="form-control" id="periodo" name="periodo" value="{{ old('periodo', $periodo->periodo) }}" {{$des}}>
+                    @error("periodo")
                         <div class="text-danger">Error en: {{ $message }}</div>
                     @enderror
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="nombredepto" class="col-sm-4 col-form-label">Nombre Departamento:</label>
+                <label for="desccorta" class="col-sm-4 col-form-label">Descripción Corta:</label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" id="nombredepto" name="nombredepto" value="{{ old('nombredepto', $depto->nombredepto) }}" {{$des}}>
-                    @error("nombredepto")
+                    <input type="text" class="form-control" id="desccorta" name="desccorta" value="{{ old('desccorta', $periodo->desccorta) }}" {{$des}}>
+                    @error("desccorta")
                         <div class="text-danger">Error en: {{ $message }}</div>
                     @enderror
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="nombremediano" class="col-sm-4 col-form-label">Nombre Mediano:</label>
+                <label for="fechaini" class="col-sm-4 col-form-label">Fecha de Inicio:</label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" id="nombremediano" name="nombremediano" value="{{ old('nombremediano', $depto->nombremediano) }}" {{$des}}>
-                    @error("nombremediano")
+                    <input type="date" class="form-control" id="fechaini" name="fechaini" value="{{ old('fechaini', $periodo->fechaini) }}" {{$des}}>
+                    @error("fechaini")
                         <div class="text-danger">Error en: {{ $message }}</div>
                     @enderror
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="nombrecorto" class="col-sm-4 col-form-label">Nombre Corto:</label>
+                <label for="fechafin" class="col-sm-4 col-form-label">Fecha de Fin:</label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" id="nombrecorto" name="nombrecorto" value="{{ old('nombrecorto', $depto->nombrecorto) }}" {{$des}}>
-                    @error("nombrecorto")
+                    <input type="date" class="form-control" id="fechafin" name="fechafin" value="{{ old('fechafin', $periodo->fechafin) }}" {{$des}}>
+                    @error("fechafin")
                         <div class="text-danger">Error en: {{ $message }}</div>
                     @enderror
                 </div>
@@ -73,7 +73,7 @@
                 @if(!empty($txtbtn))
                     <button type="submit" class="btn btn-primary">{{$txtbtn}}</button>
                 @endif
-                <a href="{{ route('deptos.index') }}" class="btn btn-secondary">Regresar</a>
+                <a href="{{ route('periodos.index') }}" class="btn btn-secondary">Regresar</a>
             </div>
         </form>
         </div>

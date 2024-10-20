@@ -87,8 +87,10 @@
             </div>
 
             <div class="text-center">
-                <button type="submit" class="btn btn-primary">{{$txtbtn}}</button>
-                <button type="reset" class="btn btn-secondary">Limpiar</button>
+                @if(!empty($txtbtn))
+                    <button type="submit" class="btn btn-primary">{{$txtbtn}}</button>
+                @endif
+                <a href="{{ route('alumnos.index') }}" class="btn btn-secondary">Regresar</a>
             </div>
         </form>
     </div>

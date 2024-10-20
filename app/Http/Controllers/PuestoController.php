@@ -43,7 +43,7 @@ class PuestoController extends Controller
     public function show(Puesto $puesto)
     {
         $accion = "D";
-        $txtbtn = "Confirmar Eliminación";
+        $txtbtn = "";
         $des = "disabled";
         return view("puestos.frm", compact("puesto", "accion", "txtbtn", "des"));
     }

@@ -3,7 +3,7 @@
 @section("contenido2")
     @if(session('mensaje'))
         <p>{{ session('mensaje') }}</p>
-    @endif
+    @endif 
     <div class="container mt-4">
     <div class="mb-3">
         <a href="{{ route('alumnos.create') }}" class="btn btn-outline-secondary">Registrar Alumno</a>

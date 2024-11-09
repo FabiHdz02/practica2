@@ -15,10 +15,6 @@ class DeptoSeeder extends Seeder
      */
     public function run(): void
     {
-        Depto::factory(1)->has(
-            Carrera::factory(3)->has(
-                Alumno::factory(4)
-            )
-        )->create();
-    }
+        Depto::factory(10)->create();
+    }    
 }

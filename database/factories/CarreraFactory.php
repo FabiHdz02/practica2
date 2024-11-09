@@ -17,13 +17,27 @@ class CarreraFactory extends Factory
      */
     public function definition(): array
     {
-        $titulo=fake()->unique()->jobTitle();
+        $carreras = [
+            "Contador Público",
+            "Ing. en Logística",
+            "Ing. Electrónica",
+            "Ing. Mecánica",
+            "Ing. Mecatrónica",
+            "Ing. en Sistemas Computacionales",
+            "Ing. Industrial",
+            "Ing. en Gestión Empresarial"
+        ];
+    
+        static $indice = -1;
+        $indice++;
+    
         return [
-            "idcarrera"=>fake()->unique()->bothify("????####"),
-            "nombrecarrera"=>$titulo,
-            "nombremediano"=>fake()->lexify(str_repeat("?",15)),
-            "nombrecorto"=>substr($titulo,0,5),
-            "depto_id"=>Depto::factory()
+            "idcarrera" => fake()->unique()->bothify("????####"),
+            "nombrecarrera" => $carreras[$indice],
+            "nombremediano" => fake()->lexify(str_repeat("?", 15)),
+            "nombrecorto" => substr($carreras[$indice], 0, 5),
+            "depto_id" => Depto::inRandomOrder()->first()->id  // Selecciona un depto_id aleatorio
         ];
     }
+    
 }

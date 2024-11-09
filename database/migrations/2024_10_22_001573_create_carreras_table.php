@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('carreras', function (Blueprint $table) {
             $table->id();
             $table->string('idcarrera',15)->unique();
-            $table->string('nombrecarrera',200)->unique();
-            $table->string('nombremediano',50)->unique();
-            $table->string('nombrecorto',5)->unique();
+            $table->string('nombrecarrera',200);
+            $table->string('nombremediano',50);
+            $table->string('nombrecorto',5);
             $table->foreignId('depto_id')->constrained();
             $table->timestamps();
         });        

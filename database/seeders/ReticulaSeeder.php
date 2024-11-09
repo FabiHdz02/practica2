@@ -13,6 +13,6 @@ class ReticulaSeeder extends Seeder
      */
     public function run(): void
     {
-        Reticula::factory(10)->create();
+        Reticula::factory(7)->create();
     }
 }

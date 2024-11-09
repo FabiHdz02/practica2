@@ -20,6 +20,7 @@
                         <th scope="col">Nombre Corto</th>
                         <th scope="col">Modalidad</th>
                         <th scope="col">Retícula</th>
+                        <th scope="col">Semestre</th>
                         <th scope="col" colspan="3">Acciones</th>
                     </tr>
                 </thead>
@@ -32,6 +33,7 @@
                         <td>{{ $materia->nombrecorto }}</td>
                         <td>{{ $materia->modalidad }}</td>
                         <td>{{ $materia->reticula->descripcion }}</td>
+                        <td>{{ $materia->semestre }}</td>
                         <td><a href="{{ route('materias.edit', $materia->id) }}" class="btn btn-outline-primary">Editar</a></td>
                         <td>
                             <form action="{{ route('materias.destroy', $materia->id) }}" method="POST" style="display:inline;">

@@ -16,10 +16,27 @@ class PuestoFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            'idpuesto' => $this->faker->bothify('??#####??'), 
-            'nombre' => $this->faker->jobTitle(),
-            'tipo' => $this->faker->randomElement(['Administrativo', 'Académico', 'Directivo', 'Técnico', 'Operativo', 'Asistente', 'Jefe']),
+        static $indice = -1;
+        $indice++;
+    
+        $puestos = [
+            ['Docente', 'DOC01', 'Docente'],             // Docente
+            ['Director', 'DIR01', 'Direccion'],
+            ['Subdirector académico', 'DIR02', 'Direccion'],
+            ['Subdirector de plantación', 'DIR03', 'Direccion'],
+            ['Auxiliar de laboratorio', 'AUX01', 'Auxiliar'],
+            ['Auxiliar de biblioteca', 'AUX02', 'Auxiliar'],
+            ['Auxiliar de taller', 'AUX03', 'Auxiliar'],
+            ['Jefe de recursos humanos', 'ADM01', 'Administrativo'],
+            ['Jefe académico', 'ADM02', 'Administrativo'],
+            ['Jefe división de estudiosos', 'ADM03', 'Administrativo'],
+            ['No Docente', 'ND01', 'Administrativo'],       // Nuevo puesto: No Docente
         ];
-    }
+    
+        return [
+            'nombre' => $puestos[$indice][0],    // Nombre del puesto
+            'idpuesto' => $puestos[$indice][1],   // ID del puesto
+            'tipo' => $puestos[$indice][2],       // Tipo de puesto
+        ];
+    }    
 }

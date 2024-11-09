@@ -16,12 +16,30 @@ class DeptoFactory extends Factory
      */
     public function definition(): array
     {
-        $titulo=fake()->unique()->jobTitle();
+        // Array con los departamentos definidos
+        $departamentos = [
+            "Direccion", 
+            "Subdireccion",
+            "ISC", 
+            "IE", 
+            "IM", 
+            "IME", 
+            "CP", 
+            "IGE", 
+            "II", 
+            "Ciencias Basicas"
+        ];
+
+        // Asignar un nombre aleatorio de la lista de departamentos
+        static $indice = -1;
+        $indice++;
+
         return [
-            'iddepto' => fake()->unique()->bothify("?#"),
-            'nombredepto' => $titulo,
-            'nombremediano' => fake()->unique()->lexify(str_repeat("?",15)),
-            'nombrecorto' => substr($titulo,0,5)
+            'iddepto' => fake()->unique()->bothify("?#"),  // Generación de ID único
+            'nombredepto' => $departamentos[$indice % count($departamentos)],  // Asigna el nombre del departamento según el índice
+            'nombremediano' => fake()->unique()->lexify(str_repeat("?", 15)),  // Nombre mediano aleatorio
+            'nombrecorto' => substr($departamentos[$indice % count($departamentos)], 0, 5)  // Nombre corto (primeros 5 caracteres del nombre del departamento)
         ];
     }
+
 }

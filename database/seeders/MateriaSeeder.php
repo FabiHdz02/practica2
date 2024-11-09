@@ -13,6 +13,6 @@ class MateriaSeeder extends Seeder
      */
     public function run(): void
     {
-        Materia::factory(10)->create();
+        Materia::factory(45)->create();
     }
 }

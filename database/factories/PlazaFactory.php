@@ -14,11 +14,17 @@ class PlazaFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
-    {
-        return [
-            'idplaza' => $this->faker->unique()->bothify('??#####??#####??'),
-            'nombreplaza' => $this->faker->sentence(10),
-        ];
-    }
+    public function definition(): array 
+{ 
+    // Lista de plazas
+    static $indice = -1; 
+    $indice++;
+    
+    $plazas = ["E3817", "E3815", "E3717", "E3617", "E3520"];
+    
+    return [
+        'idplaza' => $plazas[$indice % count($plazas)], // Asignar plaza de forma cíclica
+        'nombreplaza' => $this->faker->sentence(10),
+    ]; 
+}
 }

@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('deptos', function (Blueprint $table) {
+        Schema::create('personal_plazas', function (Blueprint $table) {
             $table->id();
-            $table->string('iddepto')->unique();
-            $table->string('nombredepto',100);
-            $table->string('nombremediano',15);
-            $table->string('nombrecorto',5);
+            $table->smallInteger('tiponombramiento');
+            $table->foreignId('plaza_id')->constrained();
+            $table->foreignId('personal_id')->constrained();
             $table->timestamps();
-        });        
+        });
     }
 
     /**
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('deptos');
+        Schema::dropIfExists('personal_plazas');
     }
 };

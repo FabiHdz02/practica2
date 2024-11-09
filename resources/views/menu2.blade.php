@@ -76,12 +76,15 @@
                             <li><a class="dropdown-item" href="{{ route('periodos.index') }}">Periodos</a></li>
                             <li><a class="dropdown-item" href="{{ route('plazas.index') }}">Plazas</a></li>
                             <li><a class="dropdown-item" href="{{ route('puestos.index') }}">Puestos</a></li>
-                            <li><a class="dropdown-item" href="">Personal</a></li>
                             <li><a class="dropdown-item" href="{{ route('deptos.index') }}">Deptos</a></li>
                             <li><a class="dropdown-item" href="{{ route('carreras.index') }}">Carreras</a></li>
                             <li><a class="dropdown-item" href="{{ route('reticulas.index') }}">Retículas</a></li>
                             <li><a class="dropdown-item" href="{{ route('materias.index') }}">Materias</a></li>
                             <li><a class="dropdown-item" href="{{ route('alumnos.index') }}">Alumnos</a></li>
+                            <li><a class="dropdown-item" href="{{ route('edificios.index') }}">Edificios</a></li>
+                            <li><a class="dropdown-item" href="{{ route('lugares.index') }}">Lugares</a></li>
+                            <li><a class="dropdown-item" href="{{ route('personals.index') }}">Personal</a></li>
+                            <li><a class="dropdown-item" href="{{ route('personalplazas.index') }}">Personal Plazas</a></li>
                         </ul>
                     </li>
 

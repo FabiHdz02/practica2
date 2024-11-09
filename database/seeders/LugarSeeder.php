@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Periodo;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Lugar;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-class PeriodoSeeder extends Seeder
+class LugarSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Periodo::factory(7)->create();
+        Lugar::factory(33)->create();
     }
 }

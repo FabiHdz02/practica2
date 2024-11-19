@@ -37,19 +37,33 @@
 
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" value="{{old('nombre',$puesto->nombre)}}" {{$des}}>
+                <select class="form-control" id="nombre" name="nombre" {{$des}}>
+                    <option value="">Seleccione un puesto</option>
+                    <option value="Docente" {{ old('nombre', $puesto->nombre) == 'Docente' ? 'selected' : '' }}>Docente</option>
+                    <option value="No docente" {{ old('nombre', $puesto->nombre) == 'No docente' ? 'selected' : '' }}>No docente</option>
+                    <option value="Director" {{ old('nombre', $puesto->nombre) == 'Director' ? 'selected' : '' }}>Director</option>
+                    <option value="Subdirector académico" {{ old('nombre', $puesto->nombre) == 'Subdirector académico' ? 'selected' : '' }}>Subdirector académico</option>
+                    <option value="Subdirector de plantación" {{ old('nombre', $puesto->nombre) == 'Subdirector de plantación' ? 'selected' : '' }}>Subdirector de plantación</option>
+                    <option value="Auxiliar de laboratorio" {{ old('nombre', $puesto->nombre) == 'Auxiliar de laboratorio' ? 'selected' : '' }}>Auxiliar de laboratorio</option>
+                    <option value="Auxiliar de biblioteca" {{ old('nombre', $puesto->nombre) == 'Auxiliar de biblioteca' ? 'selected' : '' }}>Auxiliar de biblioteca</option>
+                    <option value="Auxiliar de taller" {{ old('nombre', $puesto->nombre) == 'Auxiliar de taller' ? 'selected' : '' }}>Auxiliar de taller</option>
+                    <option value="Jefe de recursos humanos" {{ old('nombre', $puesto->nombre) == 'Jefe de recursos humanos' ? 'selected' : '' }}>Jefe de recursos humanos</option>
+                    <option value="Jefe académico" {{ old('nombre', $puesto->nombre) == 'Jefe académico' ? 'selected' : '' }}>Jefe académico</option>
+                    <option value="Jefe división de estudiosos" {{ old('nombre', $puesto->nombre) == 'Jefe división de estudiosos' ? 'selected' : '' }}>Jefe división de estudiosos</option>
+                </select>
                 @error("nombre")
                     <p class="text-danger">Error en: {{ $message }}</p>
                 @enderror
-            </div>
+            </div>            
 
             <div class="mb-3">
                 <label for="tipo" class="form-label">Tipo</label>
                 <select class="form-control" id="tipo" name="tipo" {{$des}}>
                     <option value="" disabled {{ old('tipo', $puesto->tipo) == '' ? 'selected' : '' }}>Selecciona Tipo</option>
+                    <option value="Docente" {{ old('tipo', $puesto->tipo) == 'Docente' ? 'selected' : '' }}>Docente</option>
+                    <option value="Direccion" {{ old('tipo', $puesto->tipo) == 'Direccion' ? 'selected' : '' }}>Direccion</option>
+                    <option value="Auxiliar" {{ old('tipo', $puesto->tipo) == 'Auxiliar' ? 'selected' : '' }}>Auxiliar</option>
                     <option value="Administrativo" {{ old('tipo', $puesto->tipo) == 'Administrativo' ? 'selected' : '' }}>Administrativo</option>
-                    <option value="Académico" {{ old('tipo', $puesto->tipo) == 'Académico' ? 'selected' : '' }}>Académico</option>
-                    <option value="Directivo" {{ old('tipo', $puesto->tipo) == 'Directivo' ? 'selected' : '' }}>Directivo</option>
                 </select>
                 @error('tipo')
                     <p class="text-danger">Error en: {{ $message }}</p>

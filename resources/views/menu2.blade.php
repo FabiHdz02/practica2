@@ -85,6 +85,8 @@
                             <li><a class="dropdown-item" href="{{ route('lugares.index') }}">Lugares</a></li>
                             <li><a class="dropdown-item" href="{{ route('personals.index') }}">Personal</a></li>
                             <li><a class="dropdown-item" href="{{ route('personalplazas.index') }}">Personal Plazas</a></li>
+                            <li><a class="dropdown-item" href="{{ route('materiasa.index') }}">Materias Abiertas</a></li>
+                            <li><a class="dropdown-item" href="{{ route('grupos.index') }}">Grupo</a></li>
                         </ul>
                     </li>
 

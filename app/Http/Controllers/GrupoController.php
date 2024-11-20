@@ -13,6 +13,8 @@ use App\Models\Personal;
 use App\Models\GrupoHorario;
 use Illuminate\Http\Request;
 use App\Models\MateriaAbierta;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class GrupoController extends Controller
 {
@@ -87,13 +89,17 @@ class GrupoController extends Controller
 
     public function edit($grupo)
     {
-        // Buscar el grupo por su nombre
-        $grupoData = Grupo::where('grupo', $grupo)->firstOrFail();
-
-        // Recuperar los horarios asociados a este grupo
-        $grupoHorarios = $grupoData->grupoHorarios()->with(['lugar', 'edificio'])->get();
-
-        // Recuperar datos necesarios para el formulario
+        // Buscar el grupo por su nombre, incluyendo los horarios relacionados
+        $grupoData = Grupo::with([
+            'grupoHorarios' => function ($query) {
+                $query->with(['lugar', 'lugar.edificio']);
+            }
+        ])->where('grupo', $grupo)->firstOrFail();
+    
+        // Obtener los horarios del grupo
+        $grupoHorarios = GrupoHorario::where('grupo_id', $grupoData->id)->get();
+    
+        // Otros datos necesarios para el formulario
         $periodos = Periodo::all();
         $materiasa = MateriaAbierta::all();
         $personales = Personal::all();
@@ -101,7 +107,14 @@ class GrupoController extends Controller
         $deptos = Depto::with(['carrera', 'personal'])->get();
         $edificios = Edificio::with('lugares')->get();
         $lugares = Lugar::all();
-
+    
+        // Recuperar todos los grupos para el selector
+        $grupos = Grupo::all();
+    
+        // Verificar que los datos de horarios lleguen correctamente (opcional para depuración)
+        // dd($grupoHorarios->toArray());
+    
+        // Retornar a la vista con los datos cargados
         return view('grupos.edit', compact(
             'grupoData',
             'grupoHorarios',
@@ -111,9 +124,11 @@ class GrupoController extends Controller
             'carreras',
             'edificios',
             'lugares',
-            'deptos'
+            'deptos',
+            'grupos'
         ));
     }
+    
 
     public function update(Request $request, $id)
     {
@@ -125,35 +140,53 @@ class GrupoController extends Controller
             'periodo_id' => 'required|exists:periodos,id',
             'materia_abierta_id' => 'required|exists:materia_abiertas,id',
             'personal_id' => 'nullable|exists:personals,id',
-            'horarios.*.dia' => 'nullable|integer|min:0|max:4',
-            'horarios.*.hora' => 'nullable|date_format:H:i',
-            'horarios.*.lugar_id' => 'nullable|exists:lugars,id',
+            'horarios' => 'array',
+            'edificio_id' => 'required|exists:edificios,id',
+            'lugar_id' => 'required|exists:lugars,id'
         ]);
     
-        $grupo = Grupo::findOrFail($id);
+        try {
+            DB::beginTransaction();
+            
+            // Actualizar grupo
+            $grupo = Grupo::findOrFail($id);
+            $grupo->update($request->only([
+                'grupo',
+                'descripcion',
+                'maxalumnos',
+                'fecha',
+                'periodo_id',
+                'materia_abierta_id',
+                'personal_id',
+            ]));
     
-        $grupo->update($request->only([
-            'grupo',
-            'descripcion',
-            'maxalumnos',
-            'fecha',
-            'periodo_id',
-            'materia_abierta_id',
-            'personal_id',
-        ]));
+            // Eliminar horarios existentes
+            GrupoHorario::where('grupo_id', $grupo->id)->delete();
     
-        if ($request->has('horarios')) {
-            foreach ($request->horarios as $horarioId => $horarioData) {
-                $grupoHorario = GrupoHorario::findOrFail($horarioId);
-    
-                if ($grupoHorario->grupo_id != $grupo->id) {
-                    return redirect()->back()->withErrors(['error' => 'Horario no válido para este grupo.']);
+            // Crear nuevos horarios
+            if ($request->has('horarios')) {
+                foreach ($request->horarios as $horario) {
+                    // El formato esperado es "dia-hora", ejemplo: "1-07:00"
+                    list($dia, $hora) = explode('-', $horario);
+                    
+                    GrupoHorario::create([
+                        'grupo_id' => $grupo->id,
+                        'dia' => $dia,
+                        'hora' => $hora,
+                        'lugar_id' => $request->lugar_id,
+                    ]);
                 }
-    
-                $grupoHorario->update($horarioData);
             }
-        }
     
-        return redirect()->route('grupos.index')->with('success', 'Grupo y horarios actualizados correctamente.');
-    }    
+            DB::commit();
+            return redirect()->route('grupos.index')->with('success', 'Grupo y horarios actualizados correctamente.');
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['error' => 'Error al actualizar: ' . $e->getMessage()]);
+        }
+    }
+
 }

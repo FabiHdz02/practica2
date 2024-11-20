@@ -164,9 +164,9 @@ Route::prefix('grupos')->group(function () {
     Route::post('/store', [GrupoController::class, 'store'])->name('grupos.store');
     Route::post('/horarios/store', [GrupoHorarioController::class, 'store'])->name('grupo_horarios.store');
 });
-Route::get('/grupos/{grupo}/edit', [GrupoController::class, 'edit'])->name('grupos.edit');
 Route::put('/grupos/{grupo}', [GrupoController::class, 'update'])->name('grupos.update');
 Route::put('/grupos/{grupo}/horarios', [GrupoHorarioController::class, 'updateHorarios'])->name('grupos.updateHorarios');
+Route::get('/grupos/{grupo}/edit', [GrupoController::class, 'edit'])->name('grupos.edit');
 
 //Menu
 Route::get('/acerca', function () {

@@ -44,6 +44,7 @@ class GrupoHorarioController extends Controller
             'horarios.*.hora' => 'nullable|date_format:H:i',    // Hora opcional
             'horarios.*.edificio_id' => 'nullable|exists:edificios,id', // Edificio opcional
             'horarios.*.lugar_id' => 'nullable|exists:lugars,id',     // Lugar opcional
+            'grupo_id' => 'nullable|exists:grupos,id',
         ]);
 
         try {
@@ -65,6 +66,7 @@ class GrupoHorarioController extends Controller
                         'dia' => $horarioData['dia'] ?? null,
                         'hora' => $horarioData['hora'] ?? null,
                         'lugar_id' => $horarioData['lugar_id'] ?? null,
+                        'grupo_id' => $horarioData['grupo_id'] ?? null,
                     ]));
                 }
             }

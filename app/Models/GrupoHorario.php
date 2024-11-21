@@ -33,4 +33,10 @@ class GrupoHorario extends Model
     {
         return $this->belongsTo(Edificio::class, 'edificio_id', 'id');
     }
+
+    public function materiaAbierta()
+    {
+        return $this->belongsTo(MateriaAbierta::class, 'materia_abierta_id');
+    }
+
 }

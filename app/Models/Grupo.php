@@ -42,7 +42,7 @@ class Grupo extends Model
     // Relación con el modelo Personal
     public function personal(): BelongsTo
     {
-        return $this->belongsTo(Personal::class)->nullable();
+        return $this->belongsTo(Personal::class);
     }
 
     // Relación con el modelo GrupoHorario (si aplica)

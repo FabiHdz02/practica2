@@ -71,6 +71,7 @@ class GrupoHorarioController extends Controller
                 }
             }
 
+
             return redirect()->route('grupos.index')->with('success', 'Horarios actualizados correctamente.');
         } catch (\Exception $e) {
             // Manejo de errores

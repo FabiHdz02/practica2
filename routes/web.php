@@ -1,10 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PagoController;
 use App\Http\Controllers\DeptoController;
 use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\LugarController;
 use App\Http\Controllers\PlazaController;
+use App\Http\Controllers\TurnoController;
 use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\PuestoController;
 use App\Http\Controllers\CarreraController;
@@ -14,7 +16,11 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EdificioController;
 use App\Http\Controllers\PersonalController;
 use App\Http\Controllers\ReticulaController;
+use App\Http\Controllers\TipoinscController;
+use App\Http\Controllers\TipoPagoController;
 use App\Http\Controllers\GrupoHorarioController;
+use App\Http\Controllers\DocumentacionController;
+use App\Http\Controllers\HorarioAlumnoController;
 use App\Http\Controllers\PersonalPlazaController;
 use App\Http\Controllers\MateriaAbiertaController;
 
@@ -168,7 +174,43 @@ Route::put('/grupos/{grupo}', [GrupoController::class, 'update'])->name('grupos.
 Route::put('/grupos/{grupo}/horarios', [GrupoHorarioController::class, 'updateHorarios'])->name('grupos.updateHorarios');
 Route::get('/grupos/{grupo}/edit', [GrupoController::class, 'edit'])->name('grupos.edit');
 
-//Menu
+//Tipo_Pago
+Route::get('pagos', [PagoController::class, 'index'])->name('pagos.index');
+Route::get('pagos/create', [PagoController::class, 'create'])->name('pagos.create');
+Route::post('pagos', [PagoController::class, 'store'])->name('pagos.store');
+Route::get('pagos/{pago}', [PagoController::class, 'show'])->name('pagos.show');
+Route::get('pagos/{pago}/edit', [PagoController::class, 'edit'])->name('pagos.edit');
+Route::put('pagos/{pago}', [PagoController::class, 'update'])->name('pagos.update');
+Route::delete('pagos/{pago}', [PagoController::class, 'destroy'])->name('pagos.destroy');
+
+Route::resource('horario_alumnos', HorarioAlumnoController::class);
+
+//Turno
+Route::get('/turnos.index', [TurnoController::class, 'index'])->name('turnos.index');
+Route::get('/turnos.create', [TurnoController::class, 'create'])->name('turnos.create');
+Route::post('/turnos.store', [TurnoController::class, 'store'])->name('turnos.store');
+Route::delete('/turnos.destroy/{turno}', [TurnoController::class, 'destroy'])->name('turnos.destroy');
+Route::get('turnos/{turno}/edit', [TurnoController::class, 'edit'])->name('turnos.edit');
+Route::put('turnos/{turno}', [TurnoController::class, 'update'])->name('turnos.update');
+
+//Tipo_Ins
+Route::get('/tipoinscs', [TipoinscController::class, 'index'])->name('tipoinscs.index');
+Route::get('/tipoinscs/create', [TipoinscController::class, 'create'])->name('tipoinscs.create');
+Route::get('/tipoinscs/edit/{tipoinsc}', [TipoinscController::class, 'edit'])->name('tipoinscs.edit');
+Route::get('/tipoinscs/show/{tipoinsc}', [TipoinscController::class, 'show'])->name('tipoinscs.show');
+Route::delete('/tipoinscs/destroy/{tipoinsc}', [TipoinscController::class, 'destroy'])->name('tipoinscs.destroy');
+Route::put('/tipoinscs/update/{tipoinsc}', [TipoinscController::class, 'update'])->name('tipoinscs.update');
+Route::post('/tipoinscs/store', [TipoinscController::class, 'store'])->name('tipoinscs.store');
+
+//Documentacion
+Route::get('/documentacions', [DocumentacionController::class, 'index'])->name('documentacions.index');
+Route::get('/documentacions/create', [DocumentacionController::class, 'create'])->name('documentacions.create');
+Route::get('/documentacions/edit/{documentacion}', [DocumentacionController::class, 'edit'])->name('documentacions.edit');
+Route::get('/documentacions/show/{documentacion}', [DocumentacionController::class, 'show'])->name('documentacions.show');
+Route::delete('/documentacions/destroy/{documentacion}', [DocumentacionController::class, 'destroy'])->name('documentacions.destroy');
+Route::put('/documentacions/update/{documentacion}', [DocumentacionController::class, 'update'])->name('documentacions.update');
+Route::post('/documentacions/store', [DocumentacionController::class, 'store'])->name('documentacions.store');
+
 Route::get('/acerca', function () {
     return view('menu1.acerca');
 });

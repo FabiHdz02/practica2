@@ -87,6 +87,11 @@
                             <li><a class="dropdown-item" href="{{ route('personalplazas.index') }}">Personal Plazas</a></li>
                             <li><a class="dropdown-item" href="{{ route('materiasa.index') }}">Materias Abiertas</a></li>
                             <li><a class="dropdown-item" href="{{ route('grupos.index') }}">Grupo</a></li>
+                            <li><a class="dropdown-item" href="{{ route('tipoinscs.index') }}">Tipo Inscripcion</a></li>
+                            <li><a class="dropdown-item" href="{{ route('pagos.index') }}">Tipo Pagos</a></li>
+                            <li><a class="dropdown-item" href="{{ route('turnos.index') }}">Turno</a></li>
+                            <li><a class="dropdown-item" href="{{ route('documentacions.index') }}">Documentacion</a></li>
+                            <li><a class="dropdown-item" href="{{ route('horario_alumnos.index') }}">Horario Alumno</a></li>
                         </ul>
                     </li>
 

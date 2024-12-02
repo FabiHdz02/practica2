@@ -17,7 +17,9 @@ class MateriaController extends Controller
             'nombremateria' => ['required', 'min:3', 'max:200', 'unique:materias,nombremateria'],
             'nivel' => ['required', 'size:1'],
             'nombrecorto' => ['required', 'max:10', 'unique:materias,nombrecorto'],
-            'modalidad' => ['required', 'size:1', 'unique:materias,modalidad'],
+            'modalidad' => ['required', 'size:1'],
+            'semestre' => ['required', 'integer', 'between:1,9'],
+            'credito' => ['required', 'integer', 'between:3,6'], // Agregado
             'reticula_id' => ['required', 'exists:reticulas,id']
         ];
     }
@@ -71,6 +73,9 @@ class MateriaController extends Controller
             'nivel' => 'required',
             'nombrecorto' => 'required',
             'modalidad' => 'required',
+            'semestre' => ['required', 'integer', 'between:1,9'],
+            'credito' => ['required', 'integer', 'between:3,6'], // Agregado
+
         ]);
         $materia->update($val);
         return redirect()->route("materias.index")->with("mensaje", "Materia actualizada correctamente.");

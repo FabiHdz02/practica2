@@ -38,14 +38,13 @@ class PagoController extends Controller
 
         if ($request->hasFile('comprobante')) {
             $filePath = $request->file('comprobante')->store('comprobantes', 'public');
-            logger('Archivo guardado en: ' . $filePath); // Registro para depuración
             $data['comprobante'] = $filePath;
         } else {
             $data['comprobante'] = null;
         }
-        
 
         Pago::create($data);
+
         return redirect()->route('pagos.index')->with('mensaje', 'Pago registrado con éxito.');
     }
 
@@ -74,7 +73,21 @@ class PagoController extends Controller
         }
 
         $pago->update($data);
-        return redirect()->route('pagos.index')->with('mensaje', 'Pago actualizado con éxito.');
+
+        // Incrementar el semestre del alumno asociado
+        $alumno = Alumno::find($data['alumno_id']);
+        if ($alumno) {
+            $alumno->semestre += 1; // Incrementar el semestre
+            $alumno->save();
+        }
+
+        // Verificar si la URL de referencia proviene de 'horario_alumnos'
+        $referer = $request->headers->get('referer');
+        if (str_contains($referer, 'horario_alumnos')) {
+            return redirect()->route('horario_alumnos.frm')->with('mensaje', 'Pago actualizado con éxito.');
+        }
+
+        return redirect()->route('pagos.index')->with('mensaje', 'Pago actualizado con éxito y semestre del alumno incrementado.');
     }
 
     public function destroy(Pago $pago)

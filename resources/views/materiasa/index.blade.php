@@ -1,6 +1,12 @@
 @extends("menu2")
 
 @section("contenido2")
+<style>
+    .custom-blue {
+    background-color: #004085; /* Azul fuerte personalizado */
+    color: white; /* Asegura contraste */
+}
+</style>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -56,7 +62,7 @@
                         
                         <!-- Tarjeta de materias del semestre -->
                         <div class="card">
-                            <div class="card-header text-center bg-primary text-white">
+                            <div class="card-header text-center custom-blue">
                                 <h5>Semestre {{ $semestre }}</h5>
                             </div>
                             <div class="card-body">

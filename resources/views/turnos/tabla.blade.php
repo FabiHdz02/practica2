@@ -3,50 +3,127 @@
 @section('contenido2')
 
 @if(session('mensaje'))
-    <p>{{ session('mensaje') }}</p>
+    <div class="alert alert-info alert-dismissible fade show text-center shadow rounded-pill mb-4 animate_animated animate_fadeInUp" role="alert">
+        <strong>{{ session('mensaje') }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 @endif
 
-<div class="table-responsive-md">
+<div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-9">
-            <div class="mb-3"><br>
-                <a href="{{ route('turnos.create') }}" class="btn btn-outline-secondary">Registrar Turno</a>
+        <div class="col-lg-10">
+            <!-- Título -->
+            <h2 class="text-center mb-4 text-dark fw-bold animate_animated animate_fadeInUp">
+                <i class="fas fa-clock text-primary"></i> Gestión de Turnos
+            </h2>
+
+            <!-- Botón centrado -->
+            <div class="d-flex justify-content-center mb-4">
+                <a href="{{ route('turnos.create') }}" class="btn btn-primary btn-lg shadow rounded-pill px-4 animate_animated animate_fadeInUp">
+                    <i class="fas fa-plus-circle"></i> Registrar Turno
+                </a>
             </div>
 
-            <table class="table table-bordered table-striped table-hover">
-                <thead class="table-light">
-                    <tr>
-                        <th>ID</th>
-                        <th>Fecha</th>
-                        <th>Hora</th>
-                        <th>Código Canal</th>
-                        <th>Alumno</th>
-                        <th colspan="2">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($turnos as $turno)
-                    <tr>
-                        <td>{{ $turno->id }}</td>
-                        <td>{{ $turno->fecha }}</td>
-                        <td>{{ $turno->hora }}</td>
-                        <td>{{ $turno->codigocanal }}</td>
-                        <td>{{ $turno->alumno->nombre }}</td>
-                        <td><a href="{{ route('turnos.edit', $turno->id) }}" class="btn btn-outline-primary">Editar</a></td>
-                        <td>
-                            <form action="{{ route('turnos.destroy', $turno->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-outline-danger">Eliminar</button>
-                            </form>
-                        </td>                
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            {{ $turnos->links() }}
+            <!-- Tabla -->
+            <div class="table-responsive shadow rounded animate_animated animate_fadeInUp" style="border-radius: 20px; overflow: hidden; max-width: 1100px; margin: 0 auto;">
+                <table class="table table-hover table-borderless align-middle">
+                    <thead class="bg-dark text-white">
+                        <tr>
+                            <th style="width: 10%;">ID</th>
+                            <th style="width: 20%;">Fecha</th>
+                            <th style="width: 15%;">Hora</th>
+                            <th style="width: 20%;">Código Canal</th>
+                            <th style="width: 25%;">Alumno</th>
+                            <th colspan="2" style="width: 10%;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-light">
+                        @foreach ($turnos as $turno)
+                        <tr class="hover-shadow">
+                            <td class="fw-bold">{{ $turno->id }}</td>
+                            <td>{{ \Carbon\Carbon::parse($turno->fecha)->format('d/m/Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($turno->hora)->format('H:i A') }}</td>
+                            <td>{{ $turno->codigocanal }}</td>
+                            <td>
+                                {{ $turno->alumno->nombre ?? 'Sin asignar' }} 
+                                {{ $turno->alumno->apellidop ?? '' }} 
+                                {{ $turno->alumno->apellidom ?? '' }}
+                            </td>
+                            <td class="text-center">
+                                <a href="{{ route('turnos.edit', $turno->id) }}" class="btn btn-outline-primary btn-sm rounded-pill">
+                                    Editar
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill delete-btn" 
+                                        data-id="{{ $turno->id }}" data-action="{{ route('turnos.destroy', $turno->id) }}">
+                                    Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginación -->
+            <div class="d-flex justify-content-center mt-4">
+                {{ $turnos->links() }}
+            </div>
         </div>
     </div>
 </div>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    // Escucha clics en los botones de eliminar
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault(); // Evita el envío inmediato del formulario
+            const actionUrl = this.getAttribute('data-action'); // Ruta de eliminación
+            const id = this.getAttribute('data-id'); // ID del elemento
+
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: `No podrás revertir esto. El turno con ID ${id} será eliminado.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminarlo',
+                cancelButtonText: 'Cancelar',
+                showClass: {
+                    popup: 'animate_animated animate_fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate_animated animate_fadeOutUp'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Crear un formulario para enviar el DELETE
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = actionUrl;
+
+                    const csrfField = document.createElement('input');
+                    csrfField.type = 'hidden';
+                    csrfField.name = '_token';
+                    csrfField.value = '{{ csrf_token() }}';
+                    form.appendChild(csrfField);
+
+                    const methodField = document.createElement('input');
+                    methodField.type = 'hidden';
+                    methodField.name = '_method';
+                    methodField.value = 'DELETE';
+                    form.appendChild(methodField);
+
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>
 
 @endsection

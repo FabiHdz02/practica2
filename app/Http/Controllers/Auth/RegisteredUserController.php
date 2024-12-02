@@ -45,6 +45,18 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // Redirigir según la primera letra del email
+        $email = $user->email;
+
+        if (str_starts_with($email, 'a')) {
+            // Redirige a menu3 si el email comienza con 'a'
+            return redirect()->intended(route('menu3', absolute: false));
+        } elseif (str_starts_with($email, 'd')) {
+            // Redirige a menu2 si el email comienza con 'd'
+            return redirect()->intended(route('menu2', absolute: false));
+        }
+
+        // Redirige por defecto al dashboard
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 }

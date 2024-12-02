@@ -22,4 +22,10 @@ class HorarioAlumno extends Model
     {
         return $this->belongsTo(GrupoHorario::class);
     }
+
+    public function calificacion()
+    {
+        return $this->hasOne(Calificacion::class, 'horario_alumno_id');
+    }
+
 }

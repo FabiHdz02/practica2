@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unique(['grupo_id', 'dia', 'hora', 'lugar_id'], 'unique_horario_grupo');
             $table->unsignedBigInteger('grupo_id')->constrained();;
             $table->unsignedBigInteger('lugar_id')->constrained();;
-            $table->tinyInteger('dia');
-            $table->time('hora');
+            $table->string('dia');
+            $table->string('hora');
             $table->timestamps();
         });
     }

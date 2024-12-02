@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Grupo21343;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagoController;
 use App\Http\Controllers\DeptoController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\LugarController;
 use App\Http\Controllers\PlazaController;
 use App\Http\Controllers\TurnoController;
 use App\Http\Controllers\AlumnoController;
+use App\Http\Controllers\CalificacionController;
 use App\Http\Controllers\PuestoController;
 use App\Http\Controllers\CarreraController;
 use App\Http\Controllers\MateriaController;
@@ -18,11 +20,15 @@ use App\Http\Controllers\PersonalController;
 use App\Http\Controllers\ReticulaController;
 use App\Http\Controllers\TipoinscController;
 use App\Http\Controllers\TipoPagoController;
+use App\Http\Controllers\Grupo21343Controller;
 use App\Http\Controllers\GrupoHorarioController;
 use App\Http\Controllers\DocumentacionController;
 use App\Http\Controllers\HorarioAlumnoController;
 use App\Http\Controllers\PersonalPlazaController;
 use App\Http\Controllers\MateriaAbiertaController;
+use App\Http\Controllers\GrupoHorario21343Controller;
+use App\Models\HorarioAlumno;
+Route::get('horario_alumnos/pdf', [HorarioAlumnoController::class, 'pdf'])->name('horario_alumnos.pdf');
 
 Route::get('/', function () {
     return view('inicio');
@@ -44,6 +50,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/menu2', function () {
         return view('menu2');
     })->name('menu2');
+
+    Route::get('/menu3', function () {
+        return view('menu3');
+    })->name('menu3');
 });
 
 Route::get('/register', function () {
@@ -51,165 +61,112 @@ Route::get('/register', function () {
 })->middleware(['auth'])->name('register');
 
 //Alumno
-Route::get('/alumnos.index', [AlumnoController::class, 'index'])->name('alumnos.index');
-Route::get('/alumnos.create', [AlumnoController::class, 'create'])->name('alumnos.create');
-Route::get('/alumnos.edit/{alumno}', [AlumnoController::class, 'edit'])->name('alumnos.edit');
-Route::get('/alumnos.show/{alumno}', [AlumnoController::class, 'show'])->name('alumnos.show');
-Route::delete('/alumnos.destroy/{alumno}', [AlumnoController::class, 'destroy'])->name('alumnos.destroy');  // Cambia POST a DELETE
-Route::post('/alumnos.update/{alumno}', [AlumnoController::class, 'update'])->name('alumnos.update');
-Route::post('/alumnos.store', [AlumnoController::class, 'store'])->name('alumnos.store');
+Route::resource('alumnos', AlumnoController::class);
 
 //Puesto
 Route::resource('puestos', PuestoController::class);
-Route::get('/puestos.index', [PuestoController::class, 'index'])->name('puestos.index');
-Route::get('/puestos.create', [PuestoController::class, 'create'])->name('puestos.create');
-Route::get('/puestos.edit/{puesto}', [PuestoController::class, 'edit'])->name('puestos.edit');
-Route::get('/puestos.show/{puesto}', [PuestoController::class, 'show'])->name('puestos.show');
-Route::delete('/puestos.destroy/{puesto}', [PuestoController::class, 'destroy'])->name('puestos.destroy');  // Cambia POST a DELETE
-Route::post('/puestos.update/{puesto}', [PuestoController::class, 'update'])->name('puestos.update');
-Route::post('/puestos.store', [PuestoController::class, 'store'])->name('puestos.store');
 
 //Depto
-Route::get('/deptos', [DeptoController::class, 'index'])->name('deptos.index');
-Route::get('/deptos/create', [DeptoController::class, 'create'])->name('deptos.create');
-Route::get('/deptos/{depto}/edit', [DeptoController::class, 'edit'])->name('deptos.edit');
-Route::get('/deptos/{depto}', [DeptoController::class, 'show'])->name('deptos.show');
-Route::delete('/deptos/{depto}', [DeptoController::class, 'destroy'])->name('deptos.destroy');
-Route::put('/deptos/{depto}', [DeptoController::class, 'update'])->name('deptos.update');
-Route::post('/deptos', [DeptoController::class, 'store'])->name('deptos.store');
+Route::resource('deptos', DeptoController::class);
 
 //Carrera
-Route::get('/carreras.index', [CarreraController::class, 'index'])->name('carreras.index');
-Route::get('/carreras.create', [CarreraController::class, 'create'])->name('carreras.create');
-Route::get('/carreras.edit/{carrera}', [CarreraController::class, 'edit'])->name('carreras.edit');
-Route::get('/carreras.show/{carrera}', [CarreraController::class, 'show'])->name('carreras.show');
-Route::delete('/carreras.destroy/{carrera}', [CarreraController::class, 'destroy'])->name('carreras.destroy');
-Route::put('/carreras.update/{carrera}', [CarreraController::class, 'update'])->name('carreras.update');
-Route::post('/carreras.store', [CarreraController::class, 'store'])->name('carreras.store');
+Route::resource('carreras', CarreraController::class);
 
 //Plaza
-Route::get('/plazas.index', [PlazaController::class, 'index'])->name('plazas.index');
-Route::get('/plazas.create', [PlazaController::class, 'create'])->name('plazas.create');
-Route::get('/plazas.edit/{plaza}', [PlazaController::class, 'edit'])->name('plazas.edit');
-Route::get('/plazas.show/{plaza}', [PlazaController::class, 'show'])->name('plazas.show');
-Route::delete('/plazas.destroy/{plaza}', [PlazaController::class, 'destroy'])->name('plazas.destroy');
-Route::post('/plazas.update/{plaza}', [PlazaController::class, 'update'])->name('plazas.update');
-Route::post('/plazas.store', [PlazaController::class, 'store'])->name('plazas.store');
+Route::resource('plazas', PlazaController::class);
 
 //Periodo
-Route::get('/periodos.index', [PeriodoController::class, 'index'])->name('periodos.index');
-Route::get('/periodos.create', [PeriodoController::class, 'create'])->name('periodos.create');
-Route::get('/periodos.edit/{periodo}', [PeriodoController::class, 'edit'])->name('periodos.edit');
-Route::get('/periodos.show/{periodo}', [PeriodoController::class, 'show'])->name('periodos.show');
-Route::delete('/periodos.destroy/{periodo}', [PeriodoController::class, 'destroy'])->name('periodos.destroy');
-Route::put('/periodos.update/{periodo}', [PeriodoController::class, 'update'])->name('periodos.update');
-Route::post('/periodos.store', [PeriodoController::class, 'store'])->name('periodos.store');
+Route::resource('periodos', PeriodoController::class);
 
 //Reticula
-Route::get('/reticulas.index', [ReticulaController::class, 'index'])->name('reticulas.index');
-Route::get('/reticulas.create', [ReticulaController::class, 'create'])->name('reticulas.create');
-Route::get('/reticulas.edit/{reticula}', [ReticulaController::class, 'edit'])->name('reticulas.edit');
-Route::get('/reticulas.show/{reticula}', [ReticulaController::class, 'show'])->name('reticulas.show');
-Route::delete('/reticulas.destroy/{reticula}', [ReticulaController::class, 'destroy'])->name('reticulas.destroy');
-Route::put('/reticulas.update/{reticula}', [ReticulaController::class, 'update'])->name('reticulas.update');
-Route::post('/reticulas.store', [ReticulaController::class, 'store'])->name('reticulas.store');
+Route::resource('reticulas', ReticulaController::class);
 
 //Materia
-Route::get('/materias.index', [MateriaController::class, 'index'])->name('materias.index');
-Route::get('/materias.create', [MateriaController::class, 'create'])->name('materias.create');
-Route::get('/materias.edit/{materia}', [MateriaController::class, 'edit'])->name('materias.edit');
-Route::get('/materias.show/{materia}', [MateriaController::class, 'show'])->name('materias.show');
-Route::delete('/materias.destroy/{materia}', [MateriaController::class, 'destroy'])->name('materias.destroy');
-Route::put('/materias.update/{materia}', [MateriaController::class, 'update'])->name('materias.update');
-Route::post('/materias.store', [MateriaController::class, 'store'])->name('materias.store');
+Route::resource('materias', MateriaController::class);
 
 //Edificio
-Route::get('/edificios.index', [EdificioController::class, 'index'])->name('edificios.index');
-Route::get('/edificios.create', [EdificioController::class, 'create'])->name('edificios.create');
-Route::get('/edificios.edit/{edificio}', [EdificioController::class, 'edit'])->name('edificios.edit');
-Route::get('/edificios.show/{edificio}', [EdificioController::class, 'show'])->name('edificios.show');
-Route::delete('/edificios.destroy/{edificio}', [EdificioController::class, 'destroy'])->name('edificios.destroy');
-Route::put('/edificios.update/{edificio}', [EdificioController::class, 'update'])->name('edificios.update');
-Route::post('/edificios.store', [EdificioController::class, 'store'])->name('edificios.store');
+Route::resource('edificios', EdificioController::class);
 
 //Lugar
-Route::get('lugares', [LugarController::class, 'index'])->name('lugares.index');
-Route::get('lugares/create', [LugarController::class, 'create'])->name('lugares.create');
-Route::post('lugares', [LugarController::class, 'store'])->name('lugares.store');
-Route::get('lugares/{lugar}', [LugarController::class, 'show'])->name('lugares.show');
-Route::get('lugares/{lugar}/edit', [LugarController::class, 'edit'])->name('lugares.edit');
-Route::put('lugares/{lugar}', [LugarController::class, 'update'])->name('lugares.update');
-Route::delete('lugares/{lugar}', [LugarController::class, 'destroy'])->name('lugares.destroy');
+Route::resource('lugares', LugarController::class);
 
 //Personal
-Route::get('personals', [PersonalController::class, 'index'])->name('personals.index');
-Route::get('personals/create', [PersonalController::class, 'create'])->name('personals.create');
-Route::post('personals', [PersonalController::class, 'store'])->name('personals.store');
-Route::get('personals/{personal}', [PersonalController::class, 'show'])->name('personals.show');
-Route::get('personals/{personal}/edit', [PersonalController::class, 'edit'])->name('personals.edit');
-Route::put('personals/{personal}', [PersonalController::class, 'update'])->name('personals.update');
-Route::delete('personals/{personal}', [PersonalController::class, 'destroy'])->name('personals.destroy');
+Route::resource('personals', PersonalController::class);
 
 //PlazaPersonal
-Route::get('personalplazas', [PersonalPlazaController::class, 'index'])->name('personalplazas.index');
-Route::get('personalplazas/create', [PersonalPlazaController::class, 'create'])->name('personalplazas.create');
-Route::post('personalplazas', [PersonalPlazaController::class, 'store'])->name('personalplazas.store');
-Route::get('personalplazas/{personalPlaza}', [PersonalPlazaController::class, 'show'])->name('personalplazas.show');
-Route::get('personalplazas/{personalPlaza}/edit', [PersonalPlazaController::class, 'edit'])->name('personalplazas.edit');
-Route::put('personalplazas/{personalPlaza}', [PersonalPlazaController::class, 'update'])->name('personalplazas.update');
-Route::delete('personalplazas/{personalPlaza}', [PersonalPlazaController::class, 'destroy'])->name('personalplazas.destroy');
+Route::resource('personalplazas', PersonalPlazaController::class);
+Route::get('horario_alumnos/frm', [HorarioAlumnoController::class, 'create'])->name('horario_alumnos.frm');
 
 //MateriaAbierta
 Route::get('/materiasa.index', [MateriaAbiertaController::class, 'index'])->name('materiasa.index');
 Route::post('/materiasa.store', [MateriaAbiertaController::class, 'store'])->name('materiasa.store');
 
 //Grupo-GrupoHorario
-Route::get('grupos', [GrupoController::class, 'index'])->name('grupos.index');
-Route::get('grupos/create', [GrupoController::class, 'create'])->name('grupos.create');
-Route::prefix('grupos')->group(function () {
-    Route::post('/store', [GrupoController::class, 'store'])->name('grupos.store');
-    Route::post('/horarios/store', [GrupoHorarioController::class, 'store'])->name('grupo_horarios.store');
+Route::resource('grupos', GrupoController::class)->parameters([
+    'grupos' => 'grupo'
+]);
+
+Route::get('/grupos.index', [GrupoController::class, 'index'])->name('grupos.index');
+Route::get('/grupos.create', [GrupoController::class, 'create'])->name('grupos.create');
+Route::get('/grupos.edit/{grupo}', [GrupoController::class, 'edit'])->name('grupos.edit');
+Route::get('/grupos.show/{grupo}', [GrupoController::class, 'show'])->name('grupos.show');
+Route::delete('/grupos.destroy/{grupo}', [GrupoController::class, 'destroy'])->name('grupos.destroy');
+Route::put('/grupos.update/{grupo}', [GrupoController::class, 'update'])->name('grupos.update');
+Route::post('/grupos.store', [GrupoController::class, 'store'])->name('grupos.store');
+
+// Rutas para GrupoHorario
+Route::get('grupohorarios', [GrupoHorarioController::class, 'index'])->name('grupohorarios.index');
+Route::get('grupohorarios/create', [GrupoHorarioController::class, 'create'])->name('grupohorarios.create');
+Route::post('grupohorarios', [GrupoHorarioController::class, 'store'])->name('grupohorarios.store');
+Route::get('grupohorarios/{id}/edit', [GrupoHorarioController::class, 'edit'])->name('grupohorarios.edit');
+Route::put('grupohorarios/{id}', [GrupoHorarioController::class, 'update'])->name('grupohorarios.update');
+Route::delete('grupohorarios/{id}', [GrupoHorarioController::class, 'destroy'])->name('grupohorarios.destroy');
+
+//Pago
+Route::resource('pagos', PagoController::class);
+
+//Calificaciones
+Route::middleware('auth')->group(function () {
+    Route::get('/calificaciones', [CalificacionController::class, 'index'])->name('calificaciones.index');
 });
-Route::put('/grupos/{grupo}', [GrupoController::class, 'update'])->name('grupos.update');
-Route::put('/grupos/{grupo}/horarios', [GrupoHorarioController::class, 'updateHorarios'])->name('grupos.updateHorarios');
-Route::get('/grupos/{grupo}/edit', [GrupoController::class, 'edit'])->name('grupos.edit');
+Route::post('/calificaciones', [CalificacionController::class, 'store'])->name('calificaciones.store');
 
-//Tipo_Pago
-Route::get('pagos', [PagoController::class, 'index'])->name('pagos.index');
-Route::get('pagos/create', [PagoController::class, 'create'])->name('pagos.create');
-Route::post('pagos', [PagoController::class, 'store'])->name('pagos.store');
-Route::get('pagos/{pago}', [PagoController::class, 'show'])->name('pagos.show');
-Route::get('pagos/{pago}/edit', [PagoController::class, 'edit'])->name('pagos.edit');
-Route::put('pagos/{pago}', [PagoController::class, 'update'])->name('pagos.update');
-Route::delete('pagos/{pago}', [PagoController::class, 'destroy'])->name('pagos.destroy');
-
+//Horario_Alumno
 Route::resource('horario_alumnos', HorarioAlumnoController::class);
 
+//Tipo_Pago
+Route::resource('tipopagos', TipoPagoController::class);
+
 //Turno
-Route::get('/turnos.index', [TurnoController::class, 'index'])->name('turnos.index');
-Route::get('/turnos.create', [TurnoController::class, 'create'])->name('turnos.create');
-Route::post('/turnos.store', [TurnoController::class, 'store'])->name('turnos.store');
-Route::delete('/turnos.destroy/{turno}', [TurnoController::class, 'destroy'])->name('turnos.destroy');
-Route::get('turnos/{turno}/edit', [TurnoController::class, 'edit'])->name('turnos.edit');
-Route::put('turnos/{turno}', [TurnoController::class, 'update'])->name('turnos.update');
+Route::resource('turnos', TurnoController::class);
 
 //Tipo_Ins
-Route::get('/tipoinscs', [TipoinscController::class, 'index'])->name('tipoinscs.index');
-Route::get('/tipoinscs/create', [TipoinscController::class, 'create'])->name('tipoinscs.create');
-Route::get('/tipoinscs/edit/{tipoinsc}', [TipoinscController::class, 'edit'])->name('tipoinscs.edit');
-Route::get('/tipoinscs/show/{tipoinsc}', [TipoinscController::class, 'show'])->name('tipoinscs.show');
-Route::delete('/tipoinscs/destroy/{tipoinsc}', [TipoinscController::class, 'destroy'])->name('tipoinscs.destroy');
-Route::put('/tipoinscs/update/{tipoinsc}', [TipoinscController::class, 'update'])->name('tipoinscs.update');
-Route::post('/tipoinscs/store', [TipoinscController::class, 'store'])->name('tipoinscs.store');
+Route::resource('tipoinscs', TipoinscController::class);
 
 //Documentacion
-Route::get('/documentacions', [DocumentacionController::class, 'index'])->name('documentacions.index');
-Route::get('/documentacions/create', [DocumentacionController::class, 'create'])->name('documentacions.create');
-Route::get('/documentacions/edit/{documentacion}', [DocumentacionController::class, 'edit'])->name('documentacions.edit');
-Route::get('/documentacions/show/{documentacion}', [DocumentacionController::class, 'show'])->name('documentacions.show');
-Route::delete('/documentacions/destroy/{documentacion}', [DocumentacionController::class, 'destroy'])->name('documentacions.destroy');
-Route::put('/documentacions/update/{documentacion}', [DocumentacionController::class, 'update'])->name('documentacions.update');
-Route::post('/documentacions/store', [DocumentacionController::class, 'store'])->name('documentacions.store');
+Route::resource('documentacions', DocumentacionController::class);
+Route::post('/tipoinsc', [DocumentacionController::class, 'getTipoInsc'])->name('tipoinsc.get');
+
+//EXAMEN
+Route::resource('grupos21343', Grupo21343Controller::class)->parameters([
+    'grupos21343' => 'grupo21343'
+]);
+
+Route::get('/grupos21343.index21343', [Grupo21343Controller::class, 'index21343'])->name('grupos21343.index21343');
+Route::get('/grupos21343.create', [Grupo21343Controller::class, 'create'])->name('grupos21343.create');
+Route::get('/grupos21343.edit/{grupo21343}', [Grupo21343Controller::class, 'edit'])->name('grupos21343.edit');
+Route::get('/grupos21343.show/{grupo21343}', [Grupo21343Controller::class, 'show'])->name('grupos21343.show');
+Route::delete('/grupos21343.destroy/{grupo21343}', [Grupo21343Controller::class, 'destroy'])->name('grupos21343.destroy');
+Route::put('/grupos21343.update/{grupo21343}', [Grupo21343Controller::class, 'update'])->name('grupos21343.update');
+Route::post('/grupos21343.store', [Grupo21343Controller::class, 'store'])->name('grupos21343.store');
+
+// Rutas para GrupoHorario21343
+Route::get('grupohorarios21343', [GrupoHorario21343Controller::class, 'index21343'])->name('grupohorarios21343.index21343');
+Route::get('grupohorarios21343/create', [GrupoHorario21343Controller::class, 'create'])->name('grupohorarios21343.create');
+Route::post('grupohorarios21343', [GrupoHorario21343Controller::class, 'store'])->name('grupohorarios21343.store');
+Route::get('grupohorarios21343/{id}/edit', [GrupoHorario21343Controller::class, 'edit'])->name('grupohorarios21343.edit');
+Route::put('grupohorarios21343/{id}', [GrupoHorario21343Controller::class, 'update'])->name('grupohorarios21343.update');
+Route::delete('grupohorarios21343/{id}', [GrupoHorario21343Controller::class, 'destroy'])->name('grupohorarios21343.destroy');
 
 Route::get('/acerca', function () {
     return view('menu1.acerca');

@@ -1,4 +1,4 @@
-@extends("menu2")
+@extends("menu3")
 
 @section("contenido2")
     @include("horario_alumnos/tabla")

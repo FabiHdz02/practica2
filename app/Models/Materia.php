@@ -18,6 +18,8 @@ class Materia extends Model
         'nivel',
         'nombrecorto',
         'modalidad',
+        'semestre',
+        'credito',
         'reticula_id',
     ];
 

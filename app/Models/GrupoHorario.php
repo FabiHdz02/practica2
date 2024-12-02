@@ -39,4 +39,9 @@ class GrupoHorario extends Model
         return $this->belongsTo(MateriaAbierta::class, 'materia_abierta_id');
     }
 
+    public function alumnos()
+    {
+        return $this->hasMany(HorarioAlumno::class, 'grupo_horario_id');
+    }
+
 }

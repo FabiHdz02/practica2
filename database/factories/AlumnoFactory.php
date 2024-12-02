@@ -43,10 +43,10 @@ class AlumnoFactory extends Factory
             ['Keren Adriana', 'Escobar', 'Castilleja', '21430336'], 
             ['Juan Yarik', 'Fuentes', 'Sierra', '21430338'], 
         ]; 
-
+    
         // Obtener las carreras disponibles
         $carreras = Carrera::all()->take(5); // Tomamos las primeras 5 carreras disponibles
-
+    
         // Asignar los alumnos de manera cíclica a cada carrera
         return [ 
             'noctrl' => $estudiantes[$indice][3], 
@@ -54,8 +54,9 @@ class AlumnoFactory extends Factory
             'apellidop' => $estudiantes[$indice][1], 
             'apellidom' => $estudiantes[$indice][2], 
             'sexo' => fake()->randomElement(['M', 'F']), 
+            'semestre' => fake()->numberBetween(1, 9), // Generar un semestre entre 1 y 10
             'carrera_id' => $carreras[$indice % count($carreras)]->id, // Asignar carrera de forma cíclica
         ]; 
-    }
+    }    
 
 }

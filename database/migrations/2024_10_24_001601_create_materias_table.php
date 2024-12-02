@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('nombrecorto',10);
             $table->char('modalidad',1);
             $table->integer('semestre');
+            $table->integer('credito');
             $table->foreignId('reticula_id')->constrained();
             $table->timestamps();
         });

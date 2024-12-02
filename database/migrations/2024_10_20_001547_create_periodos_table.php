@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('desccorta',50);
             $table->date('fechaini')->unique();
             $table->date('fechafin')->unique();
+            $table->date('fechaapertura')->unique();
+            $table->date('fechacierre')->unique();
             $table->timestamps();
         });
     }

@@ -13,10 +13,11 @@ class AlumnoController extends Controller
     public function __construct()
     {
         $this->val = [
-            'noctrl' => ['required', 'string', 'max:8', 'unique:alumnos,noctrl'],
+            'noctrl' => ['required', 'string', 'max:8'],
             'nombre' => ['required', 'string', 'max:50'],
             'apellidop' => ['required', 'string', 'max:50'],
             'apellidom' => ['nullable', 'string', 'max:50'],
+            'semestre' => ['nullable', 'integer'],
             'sexo' => ['required', 'string', 'max:1'],
             'carrera_id' => ['required', 'exists:carreras,id'],
         ];
@@ -24,7 +25,7 @@ class AlumnoController extends Controller
 
     public function index()
     {
-        $alumnos = Alumno::paginate(8);
+        $alumnos = Alumno::with('carrera')->paginate(8);
         return view("alumnos.index", compact("alumnos"));
     }
 
@@ -37,7 +38,7 @@ class AlumnoController extends Controller
         $des = "";
         return view("alumnos.frm", compact("alumno", "carreras", "accion", "txtbtn", "des"));
     }
-    
+
     public function store(Request $request)
     {
         $val = $request->validate($this->val);
@@ -62,14 +63,26 @@ class AlumnoController extends Controller
         $des = "";
         return view("alumnos.frm", compact("alumno", "carreras", "accion", "txtbtn", "des"));
     }
-    
 
     public function update(Request $request, Alumno $alumno)
-    {        
-        $alumno->update($request->all());
-        return redirect()->route("alumnos.index")->with("mensaje", "Alumno actualizado correctamente.");
-    }
+    {
+        // Validar los datos de entrada
+        $val = $request->validate($this->val);
     
+        // Actualizar el registro del alumno
+        $alumno->update($val);
+    
+        // Obtener la URL de referencia desde donde se hizo la solicitud
+        $referer = $request->headers->get('referer');
+    
+        // Verificar si la URL contiene 'horario_alumnos'
+        if (str_contains($referer, 'horario_alumnos')) {
+            return redirect()->route('horario_alumnos.index')->with('mensaje', 'Alumno actualizado correctamente.');
+        }
+    
+        // Redirigir por defecto a la lista de alumnos
+        return redirect()->route('alumnos.index')->with('mensaje', 'Alumno actualizado correctamente.');
+    }
 
     public function destroy(Alumno $alumno)
     {

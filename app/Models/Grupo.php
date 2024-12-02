@@ -46,8 +46,21 @@ class Grupo extends Model
     }
 
     // Relación con el modelo GrupoHorario (si aplica)
-    public function grupoHorarios(): HasMany
+    public function horarios()
     {
-        return $this->hasMany(GrupoHorario::class);
+        return $this->hasMany(GrupoHorario::class, 'grupo_id');
     }
+
+    public function calificacionesCompletas()
+    {
+        foreach ($this->horarios as $horario) {
+            foreach ($horario->alumnos as $horarioAlumno) {
+                if (!$horarioAlumno->calificacion || is_null($horarioAlumno->calificacion->calificacion)) {
+                    return false; // Falta una calificación
+                }
+            }
+        }
+        return true; // Todas las calificaciones están completas
+    }
+
 }

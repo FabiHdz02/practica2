@@ -35,4 +35,9 @@ class MateriaAbierta extends Model
         return $this->belongsTo(Periodo::class, 'periodo_id');
     }
 
+    public function personal()
+    {
+        return $this->belongsTo(Personal::class, 'personal_id');
+    }
+
 }

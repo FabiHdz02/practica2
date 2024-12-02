@@ -2,82 +2,85 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Edificio;
-use App\Models\Lugar;
 use Illuminate\Http\Request;
+use App\Models\Lugar;
+use App\Models\Edificio;
 
 class LugarController extends Controller
 {
-    public $val;
-
-    public function __construct()
-    {
-        // Definimos las reglas de validación
-        $this->val = [
-            'nombrelugar' => ['required', 'max:25'],
-            'nombrecorto' => ['required', 'max:5'],
-            'edificio_id' => ['required', 'exists:edificios,id']
-        ];
-    }
-
-    // Mostrar la lista de lugares
+    /**
+     * Muestra la lista de lugares.
+     */
     public function index()
     {
-        $lugares = Lugar::paginate(8);  // Paginación de 8 lugares por página
-        return view("lugares.index", compact("lugares"));
+        $lugares = Lugar::with('edificio')->paginate(10); // Paginar la lista de lugares con sus edificios
+        return view('lugares.index', compact('lugares'));
     }
 
-    // Mostrar el formulario de creación
+    /**
+     * Muestra el formulario para crear un lugar.
+     */
     public function create()
     {
-        $edificios = Edificio::all();  // Obtenemos todos los edificios
-        $lugar = new Lugar;  // Creamos una nueva instancia de Lugar
-        $accion = "C";  // Indicamos que es una creación
-        $txtbtn = "Guardar";  // Texto del botón
-        $des = "";  // Deshabilitamos el campo si es necesario
-        return view("lugares.frm", compact("lugar", "edificios", "accion", "txtbtn", "des"));
+        $accion = 'C';
+        $txtbtn = 'Registrar';
+        $edificios = Edificio::all(); // Obtener lista de edificios
+        return view('lugares.frm', compact('accion', 'txtbtn', 'edificios'));
     }
 
-    // Guardar un nuevo lugar
+    /**
+     * Guarda un nuevo lugar.
+     */
     public function store(Request $request)
     {
-        $val = $request->validate($this->val);  // Validamos los datos
-        Lugar::create($val);  // Creamos el lugar con los datos validados
-        return redirect()->route("lugares.index")->with("mensaje", "Lugar registrado correctamente.");
+        $request->validate([
+            'nombrelugar' => 'required|string|max:100',
+            'nombrecorto' => 'required|string|max:50',
+            'edificio_id' => 'required|exists:edificios,id',
+        ]);
+
+        Lugar::create($request->all());
+
+        return redirect()->route('lugares.index')->with('success', 'Lugar registrado exitosamente.');
     }
 
-    // Mostrar los detalles de un lugar
-    public function show(Lugar $lugar)
+    /**
+     * Muestra el formulario para editar un lugar.
+     */
+    public function edit($id)
     {
-        $edificios = Edificio::all();  // Obtenemos todos los edificios
-        $accion = "D";  // Indicamos que es solo para ver los detalles
-        $txtbtn = "";  // No hay botón de acción
-        $des = "disabled";  // Los campos estarán deshabilitados
-        return view("lugares.frm", compact("lugar", "edificios", "accion", "txtbtn", "des"));
+        $lugar = Lugar::findOrFail($id);
+        $accion = 'E';
+        $txtbtn = 'Actualizar';
+        $edificios = Edificio::all(); // Obtener lista de edificios
+        return view('lugares.frm', compact('lugar', 'accion', 'txtbtn', 'edificios'));
     }
 
-    // Mostrar el formulario de edición
-    public function edit(Lugar $lugar)
+    /**
+     * Actualiza un lugar existente.
+     */
+    public function update(Request $request, $id)
     {
-        $edificios = Edificio::all();  // Obtenemos todos los edificios
-        $accion = "E";  // Indicamos que es una edición
-        $txtbtn = "Actualizar";  // Texto del botón
-        $des = "";  // Los campos estarán habilitados para editar
-        return view("lugares.frm", compact('lugar', 'edificios', 'accion', 'txtbtn', 'des'));
+        $request->validate([
+            'nombrelugar' => 'required|string|max:100',
+            'nombrecorto' => 'required|string|max:50',
+            'edificio_id' => 'required|exists:edificios,id',
+        ]);
+
+        $lugar = Lugar::findOrFail($id);
+        $lugar->update($request->all());
+
+        return redirect()->route('lugares.index')->with('success', 'Lugar actualizado exitosamente.');
     }
 
-    // Actualizar un lugar existente
-    public function update(Request $request, Lugar $lugar)
+    /**
+     * Muestra el formulario para eliminar un lugar.
+     */
+    public function destroy(Request $request, $id)
     {
-        $val = $request->validate($this->val);  // Validamos los datos
-        $lugar->update($val);  // Actualizamos el lugar con los nuevos datos
-        return redirect()->route("lugares.index")->with("mensaje", "Lugar actualizado correctamente.");
-    }
+        $lugar = Lugar::findOrFail($id);
+        $lugar->delete();
 
-    // Eliminar un lugar
-    public function destroy(Lugar $lugar)
-    {
-        $lugar->delete();  // Eliminamos el lugar
-        return redirect()->route("lugares.index")->with("mensaje", "Lugar eliminado correctamente.");
+        return redirect()->route('lugares.index')->with('success', 'Lugar eliminado exitosamente.');
     }
 }

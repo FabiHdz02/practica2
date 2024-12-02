@@ -2,80 +2,180 @@
 
 @section("contenido2")
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* Formulario */
+    .container h2, 
+    .container h5, 
+    .container label, 
+    .container .form-control, 
+    .container .btn {
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* Encabezados */
+    .container h2 {
+        font-weight: 700;
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+
+    /* Etiquetas */
+    .form-label {
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+
+    /* Campos de entrada */
+    .form-control, .form-select {
+        font-weight: 400;
+        font-size: 0.9rem;
+        padding: 10px 15px;
+    }
+
+    /* Botones */
+    .btn {
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+    }
+
+    /* Línea de sección */
+    .section-divider {
+        width: 60px;
+        height: 4px;
+        background: #007bff;
+        margin-top: -5px;
+        margin-bottom: 20px;
+        border-radius: 2px;
+    }
+</style>
+
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <ul class="list-unstyled">
-                @foreach ($errors->all() as $error)
-                    <li class="text-danger">
-                        {{ $error }}
-                    </li>
-                @endforeach
-            </ul>
-
-            @if ($accion == 'C')
-                <h2 class="text-center">Registrando Departamento</h2>
-                <form action="{{ route('deptos.store') }}" method="POST">
-            @elseif ($accion == 'E')
-                <h2 class="text-center">Editando Departamento</h2>
-                <form action="{{ route('deptos.update', $depto->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-            @elseif ($accion == 'D')
-                <h2 class="text-center">Eliminar Departamento</h2>
-                <form action="{{ route('deptos.destroy', $depto->id) }}" method="POST">
-                @method('DELETE')
+        <div class="col-lg-8">
+            <!-- Errores de validación -->
+            @if ($errors->any())
+                <div class="alert alert-danger shadow rounded mb-4">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
             @endif
 
-            @csrf
+            <!-- Título dinámico -->
+            <div class="text-center mb-4">
+                <h2 class="text-dark fw-bold">
+                    @if ($accion == 'C')
+                        Registrar Departamento
+                    @elseif ($accion == 'E')
+                        Editar Departamento
+                    @elseif ($accion == 'D')
+                        Eliminar Departamento
+                    @endif
+                </h2>
+            </div>
 
-            <div class="row mb-3">
-                <label for="iddepto" class="col-sm-4 col-form-label">ID Departamento:</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" id="iddepto" name="iddepto" value="{{ old('iddepto', $depto->iddepto) }}" {{$des}}>
-                    @error("iddepto")
-                        <div class="text-danger">Error en: {{ $message }}</div>
-                    @enderror
+            <!-- Formulario -->
+            <form 
+                action="{{ 
+                    $accion == 'C' ? route('deptos.store') : 
+                    ($accion == 'E' ? route('deptos.update', $depto->id) : 
+                    route('deptos.destroy', $depto->id)) 
+                }}" 
+                method="POST" 
+                class="p-5 rounded shadow-lg bg-gradient"
+                style="background: linear-gradient(135deg, #f8f9fa, #e9ecef);"
+            >
+                @csrf
+                @if ($accion == 'E') @method('PUT') @endif
+                @if ($accion == 'D') @method('DELETE') @endif
+
+                <!-- Sección: Detalles del Departamento -->
+                <h5 class="fw-bold">Detalles del Departamento</h5>
+                <hr class="section-divider">
+                <div class="row">
+                    <!-- ID Departamento -->
+                    <div class="col-md-6 mb-3">
+                        <label for="iddepto" class="form-label">ID Departamento</label>
+                        <input 
+                            type="text" 
+                            class="form-control {{ $accion == 'D' ? 'bg-light' : '' }}" 
+                            id="iddepto" 
+                            name="iddepto" 
+                            value="{{ old('iddepto', $depto->iddepto) }}" 
+                            {{ $des }}
+                        >
+                        @error("iddepto")
+                            <p class="text-danger">Error en: {{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Nombre Departamento -->
+                    <div class="col-md-6 mb-3">
+                        <label for="nombredepto" class="form-label">Nombre Departamento</label>
+                        <input 
+                            type="text" 
+                            class="form-control {{ $accion == 'D' ? 'bg-light' : '' }}" 
+                            id="nombredepto" 
+                            name="nombredepto" 
+                            value="{{ old('nombredepto', $depto->nombredepto) }}" 
+                            {{ $des }}
+                        >
+                        @error("nombredepto")
+                            <p class="text-danger">Error en: {{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
-            </div>
+                <div class="row">
+                    <!-- Nombre Mediano -->
+                    <div class="col-md-6 mb-3">
+                        <label for="nombremediano" class="form-label">Nombre Mediano</label>
+                        <input 
+                            type="text" 
+                            class="form-control {{ $accion == 'D' ? 'bg-light' : '' }}" 
+                            id="nombremediano" 
+                            name="nombremediano" 
+                            value="{{ old('nombremediano', $depto->nombremediano) }}" 
+                            {{ $des }}
+                        >
+                        @error("nombremediano")
+                            <p class="text-danger">Error en: {{ $message }}</p>
+                        @enderror
+                    </div>
 
-            <div class="row mb-3">
-                <label for="nombredepto" class="col-sm-4 col-form-label">Nombre Departamento:</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" id="nombredepto" name="nombredepto" value="{{ old('nombredepto', $depto->nombredepto) }}" {{$des}}>
-                    @error("nombredepto")
-                        <div class="text-danger">Error en: {{ $message }}</div>
-                    @enderror
+                    <!-- Nombre Corto -->
+                    <div class="col-md-6 mb-3">
+                        <label for="nombrecorto" class="form-label">Nombre Corto</label>
+                        <input 
+                            type="text" 
+                            class="form-control {{ $accion == 'D' ? 'bg-light' : '' }}" 
+                            id="nombrecorto" 
+                            name="nombrecorto" 
+                            value="{{ old('nombrecorto', $depto->nombrecorto) }}" 
+                            {{ $des }}
+                        >
+                        @error("nombrecorto")
+                            <p class="text-danger">Error en: {{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
-            </div>
 
-            <div class="row mb-3">
-                <label for="nombremediano" class="col-sm-4 col-form-label">Nombre Mediano:</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" id="nombremediano" name="nombremediano" value="{{ old('nombremediano', $depto->nombremediano) }}" {{$des}}>
-                    @error("nombremediano")
-                        <div class="text-danger">Error en: {{ $message }}</div>
-                    @enderror
+                <!-- Botones -->
+                <div class="text-center mt-4">
+                    @if (!empty($txtbtn))
+                        <button type="submit" class="btn btn-primary px-4 py-2 rounded-pill shadow-sm">{{ $txtbtn }}</button>
+                    @endif
+                    <a href="{{ route('deptos.index') }}" class="btn btn-secondary px-4 py-2 rounded-pill shadow-sm">Regresar</a>
                 </div>
-            </div>
-
-            <div class="row mb-3">
-                <label for="nombrecorto" class="col-sm-4 col-form-label">Nombre Corto:</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" id="nombrecorto" name="nombrecorto" value="{{ old('nombrecorto', $depto->nombrecorto) }}" {{$des}}>
-                    @error("nombrecorto")
-                        <div class="text-danger">Error en: {{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
-
-            <div class="text-center">
-                @if(!empty($txtbtn))
-                    <button type="submit" class="btn btn-primary">{{$txtbtn}}</button>
-                @endif
-                <a href="{{ route('deptos.index') }}" class="btn btn-secondary">Regresar</a>
-            </div>
-        </form>
+            </form>
         </div>
     </div>
 </div>

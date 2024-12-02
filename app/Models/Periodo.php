@@ -15,5 +15,7 @@ class Periodo extends Model
         'desccorta',
         'fechaini',
         'fechafin',
+        'fechaapertura',
+        'fechacierre',
     ];
 }

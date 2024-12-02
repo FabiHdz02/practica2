@@ -7,6 +7,20 @@ use Illuminate\Http\Request;
 
 class PeriodoController extends Controller
 {
+    protected $val;
+
+    public function __construct()
+    {
+        $this->val = [
+            'periodo' => ['required', 'string', 'max:100'],
+            'desccorta' => ['required', 'string', 'max:50'],
+            'fechaini' => ['required', 'date'],
+            'fechafin' => ['required', 'date'],
+            'fechaapertura' => ['required', 'date'],
+            'fechacierre' => ['required', 'date'],
+        ];
+    }
+
     public function index()
     {
         $periodos = Periodo::paginate(8);
@@ -24,11 +38,11 @@ class PeriodoController extends Controller
 
     public function store(Request $request)
     {
-        // Eliminadas las reglas de validación
-        Periodo::create($request->all());
+        $val = $request->validate($this->val);
+        Periodo::create($val);
         return redirect()->route("periodos.index")->with("mensaje", "Periodo registrado correctamente.");
     }
-    
+
     public function show(Periodo $periodo)
     {
         $accion = "D";
@@ -47,7 +61,8 @@ class PeriodoController extends Controller
 
     public function update(Request $request, Periodo $periodo)
     {
-        $periodo->update($request->all());
+        $val = $request->validate($this->val);
+        $periodo->update($val);
         return redirect()->route("periodos.index")->with("mensaje", "Periodo actualizado correctamente.");
     }
 

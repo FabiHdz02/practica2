@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Grupo21343;
+use App\Models\HorarioAlumno;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagoController;
 use App\Http\Controllers\DeptoController;
@@ -9,25 +10,25 @@ use App\Http\Controllers\LugarController;
 use App\Http\Controllers\PlazaController;
 use App\Http\Controllers\TurnoController;
 use App\Http\Controllers\AlumnoController;
-use App\Http\Controllers\CalificacionController;
 use App\Http\Controllers\PuestoController;
 use App\Http\Controllers\CarreraController;
 use App\Http\Controllers\MateriaController;
 use App\Http\Controllers\PeriodoController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AperturaController;
 use App\Http\Controllers\EdificioController;
 use App\Http\Controllers\PersonalController;
 use App\Http\Controllers\ReticulaController;
 use App\Http\Controllers\TipoinscController;
 use App\Http\Controllers\TipoPagoController;
 use App\Http\Controllers\Grupo21343Controller;
+use App\Http\Controllers\CalificacionController;
 use App\Http\Controllers\GrupoHorarioController;
 use App\Http\Controllers\DocumentacionController;
 use App\Http\Controllers\HorarioAlumnoController;
 use App\Http\Controllers\PersonalPlazaController;
 use App\Http\Controllers\MateriaAbiertaController;
 use App\Http\Controllers\GrupoHorario21343Controller;
-use App\Models\HorarioAlumno;
 Route::get('horario_alumnos/pdf', [HorarioAlumnoController::class, 'pdf'])->name('horario_alumnos.pdf');
 
 Route::get('/', function () {
@@ -121,6 +122,7 @@ Route::post('grupohorarios', [GrupoHorarioController::class, 'store'])->name('gr
 Route::get('grupohorarios/{id}/edit', [GrupoHorarioController::class, 'edit'])->name('grupohorarios.edit');
 Route::put('grupohorarios/{id}', [GrupoHorarioController::class, 'update'])->name('grupohorarios.update');
 Route::delete('grupohorarios/{id}', [GrupoHorarioController::class, 'destroy'])->name('grupohorarios.destroy');
+Route::post('/check-horario-ocupado', [GrupoHorarioController::class, 'checkHorarioOcupado']);
 
 //Pago
 Route::resource('pagos', PagoController::class);
@@ -167,6 +169,9 @@ Route::post('grupohorarios21343', [GrupoHorario21343Controller::class, 'store'])
 Route::get('grupohorarios21343/{id}/edit', [GrupoHorario21343Controller::class, 'edit'])->name('grupohorarios21343.edit');
 Route::put('grupohorarios21343/{id}', [GrupoHorario21343Controller::class, 'update'])->name('grupohorarios21343.update');
 Route::delete('grupohorarios21343/{id}', [GrupoHorario21343Controller::class, 'destroy'])->name('grupohorarios21343.destroy');
+
+Route::get('/get-estado', [AperturaController::class, 'getEstado'])->name('get.estado');
+Route::post('/update-estado', [AperturaController::class, 'updateEstado'])->name('update.estado');
 
 Route::get('/acerca', function () {
     return view('menu1.acerca');

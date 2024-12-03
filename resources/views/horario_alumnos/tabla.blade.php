@@ -133,7 +133,7 @@
 
             {{-- Mostrar el mensaje de advertencia si no hay documentación --}}
             @if(!$documentacion)
-                <p class="alert alert-warning">El encargo aún no sube tu documentación.</p>
+                <p class="alert alert-warning">El encargado, docente o administrador aún no sube tu documentación.</p>
             @else
                 {{-- Información del Alumno --}}
                 <div class="profile-section">
@@ -148,17 +148,19 @@
                     <a href="{{ route('alumnos.edit', ['alumno' => $alumnoAuth->id, 'redirect_to' => request()->fullUrl()]) }}" class="btn-custom btn-reinscribir">Actualizar Perfil</a>
                 
                     <a href="{{ route('documentacions.edit', ['documentacion' => $documentacion->id, 'redirect_to' => request()->fullUrl()]) }}" class="btn-custom btn-reinscribir">Actualizar Documentos</a>
-                    <a href="{{ route('documentacions.edit', ['documentacion' => $documentacion->id, 'redirect_to' => route('horario_alumnos.frm')]) }}" class="btn-custom btn-reinscribir">Reinscribir</a>
+                    <a href="{{ route('documentacions.edit', ['documentacion' => $documentacion->id, 'redirect_to' => route('horario_alumnos.frm')]) }}"
+                        class="btn-custom btn-reinscribir" id="reinscribir" style="display: none;">Reinscribir</a>                
                 </div>
 
                 {{-- Horarios Asignados --}}
                 <div class="profile-section">
                     <h4>Horarios Asignados</h4>
-                    <div class="text-end mb-2">
+                    <div class="text-end mb-2" id="asignarHorario" style="display: none;">
                         <a href="{{ route('horario_alumnos.create') }}" class="btn-custom btn-edit">Asignar Nuevo Horario</a>
-                    </div>
+                     </div>
+
                     <div class="text-end mb-2">
-                        <a href="{{ route('horario_alumnos.pdf') }}" class="btn-custom btn-edit">Ver Horario en PDF</a>
+                        <a href="{{ route('horario_alumnos.pdf') }}" class="btn-custom btn-edit">Imprimir PDF</a>
                     </div>
                     @if($horarioAlumnos->isEmpty())
                         <div class="empty-state">
@@ -208,6 +210,30 @@
     @endif
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const asignarHorarioDiv = document.getElementById('asignarHorario');
+        const reinscribirLink = document.getElementById('reinscribir');
+ 
+        // Obtener el estado desde el servidor
+        const updateVisibility = () => {
+            fetch('{{ route('get.estado') }}')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.estado === 'opened') {
+                        asignarHorarioDiv.style.display = 'block';
+                        reinscribirLink.style.display = 'block';
+                    } else {
+                        asignarHorarioDiv.style.display = 'none';
+                        reinscribirLink.style.display = 'none';
+                    }
+                });
+        };
+ 
+        // Actualizar visibilidad al cargar
+        updateVisibility();
+    });
+</script>
 
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

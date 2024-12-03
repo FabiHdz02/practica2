@@ -1,3 +1,7 @@
+<head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+</head>
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-10">
@@ -26,11 +30,11 @@
                     {{ $accion == 'D' ? 'disabled' : 'required' }}
                     onchange="updateLugares()"
                 >
-                    <option value="" disabled {{ old('edificio_id', $lugar->edificio_id ?? '') == '' ? 'selected' : '' }}>Seleccione un edificio</option>
+                    <option value="" disabled {{ old('edificio_id', session('edificio_id') ?? '') == '' ? 'selected' : '' }}>Seleccione un edificio</option>
                     @foreach ($edificios as $edificio)
                         <option 
                             value="{{ $edificio->id }}" 
-                            {{ old('edificio_id', $lugar->edificio_id ?? '') == $edificio->id ? 'selected' : '' }}
+                            {{ old('edificio_id', session('edificio_id') ?? '') == $edificio->id ? 'selected' : '' }}
                         >
                             {{ $edificio->nombreedificio }}
                         </option>
@@ -39,9 +43,8 @@
                 @error('edificio_id')
                     <small class="text-danger">{{ $message }}</small>
                 @enderror
-            </div>            
+            </div>
             
-            <!-- Selector de lugar -->
             <div class="mb-4">
                 <label for="lugar_global" class="form-label">Selecciona un Lugar</label>
                 <select id="lugar_global" class="form-select" onchange="updateTable()">
@@ -50,12 +53,14 @@
                         <option 
                             value="{{ $lugar->id }}" 
                             data-edificio-id="{{ $lugar->edificio_id }}"
+                            {{ old('lugar_id', session('lugar_id') ?? '') == $lugar->id ? 'selected' : '' }}
                         >
                             {{ $lugar->nombrelugar }}
                         </option>
                     @endforeach
                 </select>
             </div>
+            
                
             <!-- Tabla de horario -->
             <table class="table table-bordered text-center">
@@ -123,7 +128,11 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
+   document.addEventListener('DOMContentLoaded', function () {
+    // Definir la función updateLugares
     function updateLugares() {
         const edificioId = document.getElementById('edificio_id').value;
         const lugarSelect = document.getElementById('lugar_global');
@@ -133,9 +142,78 @@
             option.style.display = option.dataset.edificioId === edificioId ? 'block' : 'none';
         });
 
-        // Reiniciar selección de lugar
-        lugarSelect.value = '';
+        // Asegurarse de que el lugar previamente seleccionado se mantiene
+        const selectedLugar = @json(session('lugar_id')) ?? '';
+        if (selectedLugar) {
+            lugarSelect.value = selectedLugar;
+        }
     }
+
+    // Llamar a updateLugares cuando el DOM esté completamente cargado
+    updateLugares();  // Asegurarse de que se ejecute al cargar la página
+
+    // También vincular la función a eventos 'onchange' de los selects si es necesario
+    document.getElementById('edificio_id').addEventListener('change', updateLugares);
+});
+
+function handleCheckboxChange(checkbox) {
+    const lugarId = document.getElementById('lugar_global').value;
+    const hora = checkbox.dataset.hora;
+    const dia = checkbox.dataset.dia;
+    const grupoId = document.querySelector('input[name="grupo_id"]').value;
+
+    if (!lugarId) {
+        alert('Selecciona un lugar antes de asignar');
+        checkbox.checked = false;
+        return;
+    }
+
+    // Hacer una petición al servidor para verificar si el horario ya está ocupado
+    fetch('/check-horario-ocupado', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Obtener el token CSRF
+        },
+        body: JSON.stringify({
+            grupo_id: grupoId,
+            lugar_id: lugarId,
+            hora: hora,
+            dia: dia
+        })
+    })
+    .then(response => response.json())  // Aquí esperamos siempre una respuesta JSON
+    .then(data => {
+        // Verificar si hay un error
+        if (data.error) {
+            // Mostrar el mensaje de error con SweetAlert2
+            Swal.fire({
+                title: '¡Error!',
+                text: data.error, // Este es el mensaje que viene del backend
+                icon: 'error',
+                confirmButtonText: '¡Entendido!',
+                showClass: {
+                    popup: 'animate_animated animate_shakeX' // Animación de error
+                },
+                hideClass: {
+                    popup: 'animate_animated animate_fadeOutUp'
+                }
+            });
+            checkbox.checked = false; // Desmarcar el checkbox
+        } else if (data.success) {
+            // Si el horario no está ocupado, enviar el formulario
+            const form = checkbox.closest('form');
+            form.querySelector('input[name="lugar_id"]').value = lugarId;
+            form.submit();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+
+
 
     function updateTable() {
     const lugarId = document.getElementById('lugar_global').value;
@@ -155,23 +233,6 @@
     });
 }
 
-function handleCheckboxChange(checkbox) {
-    const lugarId = document.getElementById('lugar_global').value;
 
-    if (!lugarId) {
-        alert('Selecciona un lugar antes de asignar');
-        checkbox.checked = false;
-        return;
-    }
 
-    const form = checkbox.closest('form');
-    form.querySelector('input[name="lugar_id"]').value = lugarId;
-
-    // Enviar el formulario
-    form.submit();
-}
-
-    document.addEventListener('DOMContentLoaded', () => {
-        updateLugares();
-    });
 </script>

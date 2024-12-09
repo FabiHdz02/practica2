@@ -88,7 +88,6 @@ class JsonController extends Controller
         try {
             Log::info('Datos recibidos:', $request->all());
     
-            // Valida los datos
             $validatedData = $request->validate([
                 'grupo' => 'required|string|max:5',
                 'descripcion' => 'required|string|max:200',
@@ -110,7 +109,6 @@ class JsonController extends Controller
                 $grupo = Grupo::create($validatedData);
             }
     
-            // Retorna el grupo creado o actualizado
             return response()->json([
                 'success' => true,
                 'message' => $grupo->exists ? 'Grupo actualizado exitosamente' : 'Grupo creado exitosamente',
@@ -118,7 +116,6 @@ class JsonController extends Controller
             ], 200);
     
         } catch (\Exception $e) {
-            // Registra el error en los logs
             Log::error('Error al insertar o actualizar el grupo:', ['message' => $e->getMessage()]);
     
             return response()->json([

@@ -93,7 +93,7 @@ class JsonController extends Controller
                 'descripcion' => 'required|string|max:200',
                 'maxalumnos' => 'required|integer|min:1',
                 'fecha' => 'required|date',
-                'periodo_id' => 'required|integer',
+                'periodo_id' => 'required|exists:periodos,id',
                 'materia_abierta_id' => 'required|exists:materia_abiertas,id',
                 'personal_id' => 'nullable|exists:personals,id',
             ]);

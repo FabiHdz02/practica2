@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Depto;
 use App\Models\Grupo;
 use App\Models\Lugar;
-use App\Models\Periodo;
 use App\Models\Edificio;
 use App\Models\Personal;
 use App\Models\GrupoHorario;
@@ -87,32 +86,21 @@ class JsonController extends Controller
     public function insertarGrupo(Request $request)
     {
         try {
-            // Registrar los datos recibidos para depuración
             Log::info('Datos recibidos:', $request->all());
-
-            // Validación manual para periodo_id
-            $periodoId = $request->input('periodo_id');
-            if (!Periodo::where('id', $periodoId)->exists()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'El periodo seleccionado no es válido.',
-                ], 400);
-            }
-
-            // Validación automática de otros campos
+    
             $validatedData = $request->validate([
                 'grupo' => 'required|string|max:5',
                 'descripcion' => 'required|string|max:200',
                 'maxalumnos' => 'required|integer|min:1',
                 'fecha' => 'required|date',
-                'periodo_id' => 'required|integer', // Ya fue validado manualmente
+                'periodo_id' => 'required|integer',
                 'materia_abierta_id' => 'required|exists:materia_abiertas,id',
                 'personal_id' => 'nullable|exists:personals,id',
             ]);
-
+    
             // Verificar si el grupo existe para actualizarlo
             $grupo = Grupo::where('grupo', $validatedData['grupo'])->first();
-
+    
             if ($grupo) {
                 // Si el grupo existe, actualízalo
                 $grupo->update($validatedData);
@@ -120,24 +108,23 @@ class JsonController extends Controller
                 // Si el grupo no existe, créalo
                 $grupo = Grupo::create($validatedData);
             }
-
+    
             return response()->json([
                 'success' => true,
-                'message' => $grupo->wasRecentlyCreated ? 'Grupo creado exitosamente' : 'Grupo actualizado exitosamente',
+                'message' => $grupo->exists ? 'Grupo actualizado exitosamente' : 'Grupo creado exitosamente',
                 'grupo' => $grupo,
             ], 200);
-
+    
         } catch (\Exception $e) {
-            // Registrar el error para depuración
             Log::error('Error al insertar o actualizar el grupo:', ['message' => $e->getMessage()]);
-
+    
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
             ], 500);
         }
-    }
-  
+    }    
+    
     /* Insertar Grupo Horario*/
     public function insertarGrupoHorario(Request $request)
     {
